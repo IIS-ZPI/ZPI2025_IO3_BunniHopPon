@@ -7,6 +7,8 @@ import com.bunihoppon.arithmetics.Mult.ArithmeticsMult;
 
 // Displays team members and runs arithmetic tests.
 public class Main {
+    // Java's main() method is the starting point from where the JVM starts the
+    // execution of a Java program.
     void main(String[] args) {
         // It may be better to declare a constant array of
         // team members alongside their roles
