@@ -6,16 +6,22 @@ import com.bunihoppon.arithmetics.Div.ArithmeticsDiv;
 import com.bunihoppon.arithmetics.Mult.ArithmeticsMult;
 
 public class Main {
+    private static final String teamName = "BunniHopPon";
+    private static final String scrumMasterFullName = "Andrii Bialkovskyi 253190";
+    private record TeamMember(String name, String role) {}
+    private static final TeamMember[] teamMembers = {
+        new TeamMember("justkinou", "SCRUM Master / DevOps"),
+        new TeamMember("lostbtw", "Tester"),
+        new TeamMember("B1ona4y", "Developer"),
+        new TeamMember("Kitavaxx", "Developer"),
+        new TeamMember("mikita672", "Developer"),
+    };
+
     void main(String[] args) {
-        // It may be better to declare a constant array of
-        // team members alongside their roles
-        IO.println(
-                "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
-        IO.println(
-                "lostbtw Tester");
-        IO.println("B1ona4y - Developer");
-        IO.println("Kitavaxx - Developer");
-        IO.println("mikita672 - Developer");
+        IO.println(teamName + " " + scrumMasterFullName);
+        for (TeamMember teamMember : teamMembers) {
+            IO.println(teamMember.name + " - " + teamMember.role);
+        }
 
         testArithmetics();
     }
