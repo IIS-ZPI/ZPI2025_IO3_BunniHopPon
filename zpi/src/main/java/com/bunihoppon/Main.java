@@ -4,6 +4,7 @@ public class Main {
     public static void main(String[] args) {
         System.out.println(
                 "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
+        System.out.println("Kitavaxx - Developer");
         System.out.println("mikita672 - developer");
     }
 }
