@@ -1,4 +1,4 @@
-package com.bunihoppon;
+package com.bunihoppon.arithmetics.Div;
 
 public class ArithmeticsDiv implements IArithmeticsDiv {
     @Override
