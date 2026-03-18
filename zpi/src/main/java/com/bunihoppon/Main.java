@@ -10,5 +10,4 @@ public class Main {
         System.out.println("Kitavaxx - Developer");
         System.out.println("mikita672 - developer");
     }
-
 }
