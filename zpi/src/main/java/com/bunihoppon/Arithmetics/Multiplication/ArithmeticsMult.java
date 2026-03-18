@@ -1,4 +1,4 @@
-package com.bunihoppon;
+package com.bunihoppon.Arithmetics.Multiplication;
 
 public class ArithmeticsMult implements IArithmeticsMult{
 
