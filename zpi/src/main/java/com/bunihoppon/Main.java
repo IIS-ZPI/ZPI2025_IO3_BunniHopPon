@@ -4,24 +4,11 @@ import com.bunihoppon.arithmetics.Add.ArithmeticsAdd;
 import com.bunihoppon.arithmetics.Diff.ArithmeticsDiff;
 import com.bunihoppon.arithmetics.Div.ArithmeticsDiv;
 import com.bunihoppon.arithmetics.Mult.ArithmeticsMult;
+import com.bunihoppon.team.TeamInfo;
 
 public class Main {
-    private static final String teamName = "BunniHopPon";
-    private static final String scrumMasterFullName = "Andrii Bialkovskyi 253190";
-    private record TeamMember(String name, String role) {}
-    private static final TeamMember[] teamMembers = {
-        new TeamMember("justkinou", "SCRUM Master / DevOps"),
-        new TeamMember("lostbtw", "Tester"),
-        new TeamMember("B1ona4y", "Developer"),
-        new TeamMember("Kitavaxx", "Developer"),
-        new TeamMember("mikita672", "Developer"),
-    };
-
     void main(String[] args) {
-        IO.println(teamName + " " + scrumMasterFullName);
-        for (TeamMember teamMember : teamMembers) {
-            IO.println(teamMember.name + " - " + teamMember.role);
-        }
+        TeamInfo.display();
 
         testArithmetics();
     }
