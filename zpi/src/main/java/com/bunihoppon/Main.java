@@ -1,14 +1,45 @@
 package com.bunihoppon;
 
+import com.bunihoppon.arithmetics.Add.ArithmeticsAdd;
+import com.bunihoppon.arithmetics.Diff.ArithmeticsDiff;
+import com.bunihoppon.arithmetics.Div.ArithmeticsDiv;
+import com.bunihoppon.arithmetics.Mult.ArithmeticsMult;
+
 public class Main {
-    public static void main(String[] args) {
-        System.out.println(
+    void main(String[] args) {
+        IO.println(
                 "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
-        System.out.println(
-            "lostbtw Tester");
-        System.out.println("B1ona4y - developer");
-        System.out.println("Kitavaxx - Developer");
-        System.out.println("mikita672 - developer");
+        IO.println(
+                "lostbtw Tester");
+        IO.println("B1ona4y - Developer");
+        IO.println("Kitavaxx - Developer");
+        IO.println("mikita672 - Developer");
+
+        testArithmetics();
     }
 
+    public static void testArithmetics() {
+        IO.println("=== Add test ===");
+        ArithmeticsAdd aadd = new ArithmeticsAdd();
+        IO.println(aadd.Addition(10, 2));
+
+        IO.println("=== Diff test ===");
+        ArithmeticsDiff adiff = new ArithmeticsDiff();
+        IO.println(adiff.Difference(10, 2));
+
+        IO.println("=== Mult test ===");
+        ArithmeticsMult amult = new ArithmeticsMult();
+        IO.println(amult.Multiplication(10, 2));
+
+        IO.println("=== Div test ===");
+        ArithmeticsDiv adiv = new ArithmeticsDiv();
+        IO.println(adiv.Division(10, 2));
+
+        IO.println("=== Div test 2 ===");
+        try {
+            IO.println(adiv.Division(10, 0));
+        } catch (ArithmeticException e) {
+            IO.println(e);
+        }
+    }
 }
