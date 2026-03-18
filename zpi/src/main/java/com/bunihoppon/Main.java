@@ -6,6 +6,8 @@ public class Main {
                 "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
         System.out.println(
             "lostbtw Tester");
+        System.out.println("Kitavaxx - Developer");
+        System.out.println("mikita672 - developer");
     }
 
 }
