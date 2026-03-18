@@ -5,5 +5,6 @@ public class Main {
         System.out.println(
                 "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
         System.out.println("Kitavaxx - Developer");
+        System.out.println("mikita672 - developer");
     }
 }
