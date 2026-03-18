@@ -7,6 +7,8 @@ import com.bunihoppon.arithmetics.Mult.ArithmeticsMult;
 
 public class Main {
     void main(String[] args) {
+        // It may be better to declare a constant array of
+        // team members alongside their roles
         IO.println(
                 "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
         IO.println(
