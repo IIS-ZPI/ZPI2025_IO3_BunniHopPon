@@ -9,6 +9,7 @@ public class Main {
     void main(String[] args) {
         // It may be better to declare a constant array of
         // team members alongside their roles
+        // Main entry point: prints team info and runs arithmetic operation tests
         IO.println(
                 "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
         IO.println(
