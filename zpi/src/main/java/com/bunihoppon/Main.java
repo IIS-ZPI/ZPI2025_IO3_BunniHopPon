@@ -32,11 +32,11 @@ public class Main {
         IO.println("=== Mult test ===");
         ArithmeticsMult amult = new ArithmeticsMult();
         IO.println(amult.Multiplication(10, 2));
-
+        // Valid division test
         IO.println("=== Div test ===");
         ArithmeticsDiv adiv = new ArithmeticsDiv();
         IO.println(adiv.Division(10, 2));
-
+        // Division by zero test (should throw ArithmeticException)
         IO.println("=== Div test 2 ===");
         try {
             IO.println(adiv.Division(10, 0));
