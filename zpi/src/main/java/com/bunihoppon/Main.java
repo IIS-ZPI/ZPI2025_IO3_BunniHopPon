@@ -30,7 +30,9 @@ public class Main {
         IO.println("=== Mult test ===");
         ArithmeticsMult amult = new ArithmeticsMult();
         IO.println(amult.Multiplication(10, 2));
-
+        IO.println("=== Mult test 2 ===");
+        IO.println(amult.Multiplication(10, 0));
+        // Valid division test
         IO.println("=== Div test ===");
         ArithmeticsDiv adiv = new ArithmeticsDiv();
         IO.println(adiv.Division(10, 2));
