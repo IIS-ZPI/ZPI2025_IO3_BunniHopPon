@@ -4,12 +4,21 @@ import com.bunihoppon.arithmetics.Add.ArithmeticsAdd;
 import com.bunihoppon.arithmetics.Diff.ArithmeticsDiff;
 import com.bunihoppon.arithmetics.Div.ArithmeticsDiv;
 import com.bunihoppon.arithmetics.Mult.ArithmeticsMult;
-import com.bunihoppon.team.TeamInfo;
 
 // Displays team members and runs arithmetic tests.
 public class Main {
     void main(String[] args) {
-        TeamInfo.display();
+        // It may be better to declare a constant array of
+        // team members alongside their roles
+        // Main entry point: prints team info and runs arithmetic operation tests
+        IO.println(
+                "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
+        IO.println(
+                "lostbtw Tester");
+        IO.println("B1ona4y - Developer");
+        IO.println("Kitavaxx - Developer");
+        IO.println("mikita672 - Developer");
+
         testArithmetics();
     }
     // Runs basic arithmetic checks (add, subtract, multiply, divide) and verifies division-by-zero handling.
