@@ -41,5 +41,7 @@ public class Main {
         } catch (ArithmeticException e) {
             IO.println(e);
         }
+        IO.println("=== Div test 3 ===");
+        IO.println(adiv.Division(7, -2));
     }
 }
