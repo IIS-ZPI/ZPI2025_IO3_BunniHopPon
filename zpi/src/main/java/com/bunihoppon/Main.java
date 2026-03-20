@@ -5,6 +5,7 @@ import com.bunihoppon.arithmetics.Diff.ArithmeticsDiff;
 import com.bunihoppon.arithmetics.Div.ArithmeticsDiv;
 import com.bunihoppon.arithmetics.Mult.ArithmeticsMult;
 
+// Displays team members and runs arithmetic tests.
 public class Main {
     void main(String[] args) {
         // It may be better to declare a constant array of
