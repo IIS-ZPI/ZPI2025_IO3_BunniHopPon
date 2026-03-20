@@ -1,5 +1,6 @@
 package com.bunihoppon.arithmetics.Div;
 
+// Performs division and throws an exception when the divisor is zero.
 public class ArithmeticsDiv implements IArithmeticsDiv {
 
     // TODO: consider declaring a checked exception (also in the IArithmeticsDiv)
