@@ -10,6 +10,7 @@ public class Main {
     void main(String[] args) {
         // It may be better to declare a constant array of
         // team members alongside their roles
+        // Main entry point: prints team info and runs arithmetic operation tests
         IO.println(
                 "BunniHopPon Andrii Bialkovskyi (253190) github: justkinou (SCRUM Master / DevOps)");
         IO.println(
@@ -33,11 +34,11 @@ public class Main {
         IO.println("=== Mult test ===");
         ArithmeticsMult amult = new ArithmeticsMult();
         IO.println(amult.Multiplication(10, 2));
-
+        // Valid division test
         IO.println("=== Div test ===");
         ArithmeticsDiv adiv = new ArithmeticsDiv();
         IO.println(adiv.Division(10, 2));
-
+        // Division by zero test (should throw ArithmeticException)
         IO.println("=== Div test 2 ===");
         try {
             IO.println(adiv.Division(10, 0));
