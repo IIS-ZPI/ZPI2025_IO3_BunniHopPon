@@ -18,6 +18,9 @@ public class Main {
         testArithmetics();
     }
 
+    // Runs basic arithmetic checks (add, subtract, multiply, divide) and verifies
+    // division-by-zero handling.
+    // TODO: replace with unit tests
     public static void testArithmetics() {
         IO.println("=== Add test ===");
         ArithmeticsAdd aadd = new ArithmeticsAdd();
