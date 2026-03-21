@@ -1,5 +1,6 @@
 package com.bunihoppon;
 
+// this comment will be removed by git revert function
 import com.bunihoppon.arithmetics.Add.ArithmeticsAdd;
 import com.bunihoppon.arithmetics.Diff.ArithmeticsDiff;
 import com.bunihoppon.arithmetics.Div.ArithmeticsDiv;
