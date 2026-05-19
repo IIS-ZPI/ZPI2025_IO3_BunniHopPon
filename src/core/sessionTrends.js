@@ -24,7 +24,28 @@ export async function fetchNbpRates(code, startDate, endDate, fetchFn = fetch) {
   return normalizeNbpResponse(data);
 }
 
-export function countSessionTrends() { }
+export function countSessionTrends(points) {
+  const result = {
+    rising: 0,
+    falling: 0,
+    unchanged: 0,
+  };
+
+  for (let i = 1; i < points.length; i++) {
+    const prev = points[i - 1].rate;
+    const curr = points[i].rate;
+
+    if (curr > prev) {
+      result.rising++;
+    } else if (curr < prev) {
+      result.falling++;
+    } else {
+      result.unchanged++;
+    }
+  }
+
+  return result;
+}
 
 export function calcMedian() { }
 
