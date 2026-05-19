@@ -225,3 +225,137 @@ describe("calcMinMaxAvg", () => {
     expect(() => calcMinMaxAvg([])).toThrow();
   });
 });
+
+describe("calcMedian edge cases", () => {
+  it("handles decimal precision", () => {
+    const points = [
+      { date: "d1", rate: 0.1 },
+      { date: "d2", rate: 0.2 },
+      { date: "d3", rate: 0.3 }
+    ];
+    expect(calcMedian(points)).toBeCloseTo(0.2, 10);
+  });
+
+  it("throws on negative rates", () => {
+    const points = [
+      { date: "d1", rate: -1 },
+      { date: "d2", rate: 2 }
+    ];
+    expect(() => calcMedian(points)).toThrow();
+  });
+
+  it("throws on NaN/Infinity", () => {
+    expect(() =>
+      calcMedian([{ date: "d1", rate: Number.NaN }])
+    ).toThrow();
+    expect(() =>
+      calcMedian([{ date: "d1", rate: Infinity }])
+    ).toThrow();
+  });
+});
+
+describe("calcMode edge cases", () => {
+  it("throws on negative rates", () => {
+    const points = [
+      { date: "d1", rate: -1 },
+      { date: "d2", rate: 2 }
+    ];
+    expect(() => calcMode(points)).toThrow();
+  });
+
+  it("throws on NaN/Infinity", () => {
+    expect(() =>
+      calcMode([{ date: "d1", rate: Number.NaN }])
+    ).toThrow();
+    expect(() =>
+      calcMode([{ date: "d1", rate: Infinity }])
+    ).toThrow();
+  });
+});
+
+describe("calcStdDev edge cases", () => {
+  it("handles decimal precision", () => {
+    const points = [
+      { date: "d1", rate: 1 },
+      { date: "d2", rate: 2 }
+    ];
+    expect(calcStdDev(points)).toBeCloseTo(0.5, 10);
+  });
+
+  it("throws on negative rates", () => {
+    const points = [
+      { date: "d1", rate: -1 },
+      { date: "d2", rate: 2 }
+    ];
+    expect(() => calcStdDev(points)).toThrow();
+  });
+
+  it("throws on NaN/Infinity", () => {
+    expect(() =>
+      calcStdDev([{ date: "d1", rate: Number.NaN }])
+    ).toThrow();
+    expect(() =>
+      calcStdDev([{ date: "d1", rate: Infinity }])
+    ).toThrow();
+  });
+});
+
+describe("calcCoeffOfVariation edge cases", () => {
+  it("handles decimal precision", () => {
+    const points = [
+      { date: "d1", rate: 1 },
+      { date: "d2", rate: 2 }
+    ];
+    expect(calcCoeffOfVariation(points)).toBeCloseTo(1 / 3, 10);
+  });
+
+  it("throws on negative rates", () => {
+    const points = [
+      { date: "d1", rate: -1 },
+      { date: "d2", rate: 2 }
+    ];
+    expect(() => calcCoeffOfVariation(points)).toThrow();
+  });
+
+  it("throws on NaN/Infinity", () => {
+    expect(() =>
+      calcCoeffOfVariation([{ date: "d1", rate: Number.NaN }])
+    ).toThrow();
+    expect(() =>
+      calcCoeffOfVariation([{ date: "d1", rate: Infinity }])
+    ).toThrow();
+  });
+});
+
+describe("calcMinMaxAvg edge cases", () => {
+  it("handles decimal precision", () => {
+    const points = [
+      { date: "d1", rate: 0.1 },
+      { date: "d2", rate: 0.2 },
+      { date: "d3", rate: 0.4 }
+    ];
+    expect(calcMinMaxAvg(points)).toEqual({
+      min: 0.1,
+      max: 0.4,
+      avg: 0.23333333333333334
+    });
+    expect(calcMinMaxAvg(points).avg).toBeCloseTo(0.2333333333, 10);
+  });
+
+  it("throws on negative rates", () => {
+    const points = [
+      { date: "d1", rate: -1 },
+      { date: "d2", rate: 2 }
+    ];
+    expect(() => calcMinMaxAvg(points)).toThrow();
+  });
+
+  it("throws on NaN/Infinity", () => {
+    expect(() =>
+      calcMinMaxAvg([{ date: "d1", rate: Number.NaN }])
+    ).toThrow();
+    expect(() =>
+      calcMinMaxAvg([{ date: "d1", rate: Infinity }])
+    ).toThrow();
+  });
+});
