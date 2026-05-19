@@ -47,7 +47,29 @@ export function countSessionTrends(points) {
   return result;
 }
 
-export function calcMedian() { }
+function extractAndValidateRates(points) {
+  if (!points || points.length === 0) {
+    throw new Error("Empty input");
+  }
+  return points.map((p) => {
+    const r = p.rate;
+    if (typeof r !== "number" || Number.isNaN(r) || !Number.isFinite(r) || r < 0) {
+      throw new Error("Invalid rate");
+    }
+    return r;
+  });
+}
+
+export function calcMedian(points) {
+  const rates = extractAndValidateRates(points);
+  rates.sort((a, b) => a - b);
+
+  const mid = Math.floor(rates.length / 2);
+  if (rates.length % 2 === 0) {
+    return (rates[mid - 1] + rates[mid]) / 2;
+  }
+  return rates[mid];
+}
 
 export function calcMode() { }
 
