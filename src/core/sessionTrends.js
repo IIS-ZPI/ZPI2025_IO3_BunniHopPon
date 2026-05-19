@@ -97,6 +97,11 @@ export function calcStdDev(points) {
   return Math.sqrt(variance);
 }
 
-export function calcCoeffOfVariation() { }
+export function calcCoeffOfVariation(points) {
+  const rates = extractAndValidateRates(points)
+  const mean = points.values(points).reduce((acc, curr) => acc + curr, 0) / points.length
+
+  return calcStdDev(points) / cal
+ }
 
 export function calcMinMaxAvg() { }
