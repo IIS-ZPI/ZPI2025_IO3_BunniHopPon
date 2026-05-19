@@ -71,7 +71,23 @@ export function calcMedian(points) {
   return rates[mid];
 }
 
-export function calcMode() { }
+export function calcMode(points) {
+  const rates = extractAndValidateRates(points);
+  const counts = new Map();
+  let maxCount = 0;
+  let mode = null;
+
+  for (const rate of rates) {
+    const count = (counts.get(rate) || 0) + 1;
+    counts.set(rate, count);
+    if (count > maxCount) {
+      maxCount = count;
+      mode = rate;
+    }
+  }
+
+  return maxCount > 1 ? mode : null;
+}
 
 export function calcStdDev() { }
 
