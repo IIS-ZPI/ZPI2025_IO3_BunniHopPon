@@ -89,7 +89,13 @@ export function calcMode(points) {
   return maxCount > 1 ? mode : null;
 }
 
-export function calcStdDev() { }
+export function calcStdDev(points) {
+  const rates = extractAndValidateRates(points);
+  const n = rates.length;
+  const mean = rates.reduce((a, b) => a + b, 0) / n;
+  const variance = rates.reduce((a, b) => a + Math.pow(b - mean, 2), 0) / n;
+  return Math.sqrt(variance);
+}
 
 export function calcCoeffOfVariation() { }
 
