@@ -334,12 +334,10 @@ describe("calcMinMaxAvg edge cases", () => {
       { date: "d2", rate: 0.2 },
       { date: "d3", rate: 0.4 }
     ];
-    expect(calcMinMaxAvg(points)).toEqual({
-      min: 0.1,
-      max: 0.4,
-      avg: 0.23333333333333334
-    });
-    expect(calcMinMaxAvg(points).avg).toBeCloseTo(0.2333333333, 10);
+    const result = calcMinMaxAvg(points);
+    expect(result.min).toBe(0.1);
+    expect(result.max).toBe(0.4);
+    expect(result.avg).toBeCloseTo(0.2333333333, 10);
   });
 
   it("throws on negative rates", () => {
