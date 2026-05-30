@@ -8,7 +8,7 @@ import {
   calcStdDev,
   calcCoeffOfVariation,
   calcMinMaxAvg
-} from "../core/sessionTrends.js";
+} from "../../core/sessionTrends.js";
 
 describe("normalizeNbpResponse", () => {
   it("maps NBP response into date/rate points", () => {
