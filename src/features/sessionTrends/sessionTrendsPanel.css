@@ -1,0 +1,56 @@
+.session-trends-panel {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.controls {
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: left;
+}
+
+.time-periods {
+  display: flex;
+  gap: 8px;
+}
+
+.chart-container {
+  height: 400px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  position: relative;
+}
+
+.stats-grid, .min-max-avg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.stat-item .label {
+  font-size: 14px;
+  color: var(--text);
+}
+
+.stat-item .value {
+  font-weight: bold;
+  color: var(--text-h);
+}
