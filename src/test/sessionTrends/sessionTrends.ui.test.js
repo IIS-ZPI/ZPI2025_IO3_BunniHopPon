@@ -45,6 +45,33 @@ describe("Session trends UI", () => {
 		expect(screen.getByText(/min/i)).toBeInTheDocument();
 		expect(screen.getByText(/avg/i)).toBeInTheDocument();
 	});
+    
+	it("uses a bounded start date", () => {
+		render(React.createElement(SessionTrendsPanel));
+
+		const startDate = screen.getByLabelText(/start date/i);
+		expect(startDate).toHaveAttribute("min", "2002-01-02");
+	});
+
+	it("renders a session trends chart container", () => {
+		render(React.createElement(SessionTrendsPanel));
+
+		expect(screen.getByTestId("session-trends-chart")).toBeInTheDocument();
+	});
+
+	it("shows a predefined list of currencies", () => {
+		render(React.createElement(SessionTrendsPanel));
+
+		const select = screen.getByLabelText(/exchange rate/i);
+		const options = Array.from(select.querySelectorAll("option")).map(
+			(option) => option.textContent
+		);
+		const trimmed = options
+			.map((value) => (value ? value.trim() : ""))
+			.filter((value) => value.length > 0);
+
+		expect(trimmed.length).toBeGreaterThan(0);
+	});
 
 	it("disables controls and shows spinner during loading", () => {
 		render(React.createElement(SessionTrendsPanel, { isLoading: true }));
