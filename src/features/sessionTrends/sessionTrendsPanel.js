@@ -1,11 +1,18 @@
 import React, { useState } from "react";
 import "./sessionTrendsPanel.css";
 
-export default function SessionTrendsPanel({ isLoading = false }) {
+export default function SessionTrendsPanel({ isLoading: externalLoading = false }) {
   const [currency, setCurrency] = useState("USD");
   const [startDate, setStartDate] = useState("2024-01-01");
+  const [period, setPeriod] = useState("1m");
+  const [isLoading, setIsLoading] = useState(externalLoading);
 
-  const currencies = ["USD", "EUR", "GBP", "CHF", "JPY"];
+  const currencies = ["USD", "EUR", "GBP", "CHF", "JPY", "AUD", "CAD", "SEK"];
+  const periods = ["1w", "2w", "1m", "1q", "6m", "1y"];
+
+  React.useEffect(() => {
+    setIsLoading(externalLoading);
+  }, [externalLoading]);
 
   return (
     <div className="session-trends-panel">
@@ -39,9 +46,14 @@ export default function SessionTrendsPanel({ isLoading = false }) {
         </div>
 
         <div className="time-periods">
-          {["1w", "2w", "1m", "1q", "6m", "1y"].map((period) => (
-            <button key={period} disabled={isLoading}>
-              {period}
+          {periods.map((p) => (
+            <button
+              key={p}
+              onClick={() => setPeriod(p)}
+              disabled={isLoading}
+              className={period === p ? "active" : ""}
+            >
+              {p}
             </button>
           ))}
         </div>
