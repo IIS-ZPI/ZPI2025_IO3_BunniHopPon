@@ -9,7 +9,6 @@ import {
   calcCoeffOfVariation,
   calcMinMaxAvg
 } from "../../core/sessionTrends.js";
-
 import {
   ResponsiveContainer,
   LineChart,
@@ -85,134 +84,94 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
     loadData();
   }, [currency, startDate, period]);
 
-  return (
-    <div className="session-trends-panel">
-      <div className="controls">
-        <div className="control-group">
-          <label htmlFor="currency-select">Exchange rate</label>
-          <select
-            id="currency-select"
-            value={currency}
-            onChange={(e) => setCurrency(e.target.value)}
-            disabled={isLoading}
-          >
-            {currencies.map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </select>
-        </div>
+  const el = React.createElement;
 
-        <div className="control-group">
-          <label htmlFor="start-date">Start date</label>
-          <input
-            type="date"
-            id="start-date"
-            value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
-            min="2002-01-02"
-            disabled={isLoading}
-          />
-        </div>
-
-        <div className="time-periods">
-          {periods.map((p) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              disabled={isLoading}
-              className={period === p ? "active" : ""}
-            >
-              {p}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {isLoading && <div data-testid="session-trends-spinner" className="spinner">Loading...</div>}
-      {error && <div className="error-message">{error}</div>}
-
-      <div className="chart-container" data-testid="session-trends-chart">
-        {data.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-              <XAxis
-                dataKey="date"
-                tick={{ fontSize: 12 }}
-                stroke="var(--text)"
-                tickFormatter={(str) => str.split("-").slice(1).join("-")}
-              />
-              <YAxis
-                domain={["auto", "auto"]}
-                tick={{ fontSize: 12 }}
-                stroke="var(--text)"
-              />
-              <Tooltip
-                contentStyle={{ backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" }}
-                itemStyle={{ color: "var(--accent)" }}
-              />
-              <Line
-                type="monotone"
-                dataKey="rate"
-                stroke="var(--accent)"
-                strokeWidth={3}
-                dot={false}
-                activeDot={{ r: 6, fill: "var(--accent)" }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        ) : (
-          !isLoading && <div className="no-data">No data available for the selected period.</div>
-        )}
-      </div>
-
-      <div className="stats-grid">
-        <div className="stat-item">
-          <span className="label">Median</span>
-          <span className="value">{stats ? stats.median.toFixed(4) : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Mode</span>
-          <span className="value">{stats && stats.mode !== null ? stats.mode.toFixed(4) : "N/A"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Standard deviation</span>
-          <span className="value">{stats ? stats.stdDev.toFixed(4) : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Coefficient of variation</span>
-          <span className="value">{stats && stats.coeffVar !== null ? (stats.coeffVar * 100).toFixed(2) + "%" : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Increasing</span>
-          <span className="value">{stats ? stats.counts.rising : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Decreasing</span>
-          <span className="value">{stats ? stats.counts.falling : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">No change</span>
-          <span className="value">{stats ? stats.counts.unchanged : "-"}</span>
-        </div>
-      </div>
-
-      <div className="min-max-avg">
-        <div className="stat-item">
-          <span className="label">Max</span>
-          <span className="value">{stats ? stats.minMaxAvg.max.toFixed(4) : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Min</span>
-          <span className="value">{stats ? stats.minMaxAvg.min.toFixed(4) : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Avg</span>
-          <span className="value">{stats ? stats.minMaxAvg.avg.toFixed(4) : "-"}</span>
-        </div>
-      </div>
-    </div>
+  return el("div", { className: "session-trends-panel" },
+    el("div", { className: "controls" },
+      el("div", { className: "control-group" },
+        el("label", { htmlFor: "currency-select" }, "Exchange rate"),
+        el("select", {
+          id: "currency-select",
+          value: currency,
+          onChange: (e) => setCurrency(e.target.value),
+          disabled: isLoading
+        }, currencies.map(c => el("option", { key: c, value: c }, c)))
+      ),
+      el("div", { className: "control-group" },
+        el("label", { htmlFor: "start-date" }, "Start date"),
+        el("input", {
+          type: "date",
+          id: "start-date",
+          value: startDate,
+          onChange: (e) => setStartDate(e.target.value),
+          min: "2002-01-02",
+          disabled: isLoading
+        })
+      ),
+      el("div", { className: "time-periods" },
+        periods.map(p => el("button", {
+          key: p,
+          onClick: () => setPeriod(p),
+          disabled: isLoading,
+          className: period === p ? "active" : ""
+        }, p))
+      )
+    ),
+    isLoading && el("div", { "data-testid": "session-trends-spinner", className: "spinner" }, "Loading..."),
+    error && el("div", { className: "error-message" }, error),
+    el("div", { className: "chart-container", "data-testid": "session-trends-chart" },
+      data.length > 0 ? el(ResponsiveContainer, { width: "100%", height: "100%" },
+        el(LineChart, { data: data },
+          el(CartesianGrid, { strokeDasharray: "3 3", vertical: false, stroke: "var(--border)" }),
+          el(XAxis, {
+            dataKey: "date",
+            tick: { fontSize: 12 },
+            stroke: "var(--text)",
+            tickFormatter: (str) => str.split("-").slice(1).join("-")
+          }),
+          el(YAxis, {
+            domain: ["auto", "auto"],
+            tick: { fontSize: 12 },
+            stroke: "var(--text)"
+          }),
+          el(Tooltip, {
+            contentStyle: { backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" },
+            itemStyle: { color: "var(--accent)" }
+          }),
+          el(Line, {
+            type: "monotone",
+            dataKey: "rate",
+            stroke: "var(--accent)",
+            strokeWidth: 3,
+            dot: false,
+            activeDot: { r: 6, fill: "var(--accent)" }
+          })
+        )
+      ) : (!isLoading && el("div", { className: "no-data" }, "No data available for the selected period."))
+    ),
+    el("div", { className: "stats-grid" },
+      [
+        { label: "Median", value: stats ? stats.median.toFixed(4) : "-" },
+        { label: "Mode", value: stats && stats.mode !== null ? stats.mode.toFixed(4) : "N/A" },
+        { label: "Standard deviation", value: stats ? stats.stdDev.toFixed(4) : "-" },
+        { label: "Coefficient of variation", value: stats && stats.coeffVar !== null ? (stats.coeffVar * 100).toFixed(2) + "%" : "-" },
+        { label: "Increasing", value: stats ? stats.counts.rising : "-" },
+        { label: "Decreasing", value: stats ? stats.counts.falling : "-" },
+        { label: "No change", value: stats ? stats.counts.unchanged : "-" }
+      ].map(s => el("div", { key: s.label, className: "stat-item" },
+        el("span", { className: "label" }, s.label),
+        el("span", { className: "value" }, s.value)
+      ))
+    ),
+    el("div", { className: "min-max-avg" },
+      [
+        { label: "Max", value: stats ? stats.minMaxAvg.max.toFixed(4) : "-" },
+        { label: "Min", value: stats ? stats.minMaxAvg.min.toFixed(4) : "-" },
+        { label: "Avg", value: stats ? stats.minMaxAvg.avg.toFixed(4) : "-" }
+      ].map(s => el("div", { key: s.label, className: "stat-item" },
+        el("span", { className: "label" }, s.label),
+        el("span", { className: "value" }, s.value)
+      ))
+    )
   );
 }
