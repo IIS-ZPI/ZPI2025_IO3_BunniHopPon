@@ -38,21 +38,19 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
   const [currency, setCurrency] = useState("USD");
   const [startDate, setStartDate] = useState("2024-01-01");
   const [period, setPeriod] = useState("1m");
-  const [isLoading, setIsLoading] = useState(externalLoading);
+  const [internalLoading, setInternalLoading] = useState(false);
   const [data, setData] = useState([]);
   const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
+
+  const isLoading = externalLoading || internalLoading;
 
   const currencies = ["USD", "EUR", "GBP", "CHF", "JPY", "AUD", "CAD", "SEK"];
   const periods = ["1w", "2w", "1m", "1q", "6m", "1y"];
 
   useEffect(() => {
-    setIsLoading(externalLoading);
-  }, [externalLoading]);
-
-  useEffect(() => {
     async function loadData() {
-      setIsLoading(true);
+      setInternalLoading(true);
       setError(null);
       try {
         const endDate = calculateEndDate(startDate, period);
@@ -77,7 +75,7 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
         setData([]);
         setStats(null);
       } finally {
-        setIsLoading(false);
+        setInternalLoading(false);
       }
     }
 
@@ -127,13 +125,13 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
         </div>
       </div>
 
-      {isLoading && <div data-testid="session-trends-spinner" className="spinner">Loading...</div>}
-      {error && <div className="error-message" style={{ color: 'red', margin: '10px 0' }}>{error}</div>}
+      {isLoading && <div data-testid="session-trends-spinner" className="spinner">Loading data...</div>}
+      {error && <div className="error-message">{error}</div>}
 
       <div className="chart-container" data-testid="session-trends-chart">
         {data && data.length > 0 ? (
           <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data}>
+            <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
               <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
               <XAxis
                 dataKey="date"
