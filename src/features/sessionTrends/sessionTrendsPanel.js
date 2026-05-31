@@ -10,6 +10,16 @@ import {
   calcMinMaxAvg
 } from "../../core/sessionTrends.js";
 
+import {
+  ResponsiveContainer,
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip
+} from "recharts";
+
 function calculateEndDate(startDateStr, period) {
   const start = new Date(startDateStr);
   const end = new Date(start);
@@ -124,7 +134,38 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
       {error && <div className="error-message">{error}</div>}
 
       <div className="chart-container" data-testid="session-trends-chart">
-        {}
+        {data.length > 0 ? (
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+              <XAxis
+                dataKey="date"
+                tick={{ fontSize: 12 }}
+                stroke="var(--text)"
+                tickFormatter={(str) => str.split("-").slice(1).join("-")}
+              />
+              <YAxis
+                domain={["auto", "auto"]}
+                tick={{ fontSize: 12 }}
+                stroke="var(--text)"
+              />
+              <Tooltip
+                contentStyle={{ backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" }}
+                itemStyle={{ color: "var(--accent)" }}
+              />
+              <Line
+                type="monotone"
+                dataKey="rate"
+                stroke="var(--accent)"
+                strokeWidth={3}
+                dot={false}
+                activeDot={{ r: 6, fill: "var(--accent)" }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        ) : (
+          !isLoading && <div className="no-data">No data available for the selected period.</div>
+        )}
       </div>
 
       <div className="stats-grid">
