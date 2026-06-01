@@ -1,5 +1,5 @@
 import { describe, it, expect } from "@jest/globals";
-import { render, screen } from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import React from "react";
 import SessionTrendsPanel from "../../features/sessionTrends/sessionTrendsPanel.jsx";
@@ -26,26 +26,6 @@ describe("Session trends UI", () => {
 		expect(screen.queryByRole("button", { name: /2y/i })).toBeNull();
 	});
 
-	it("renders fixed statistics badges", () => {
-		render(<SessionTrendsPanel />);
-
-		expect(screen.getByText(/median/i)).toBeInTheDocument();
-		expect(screen.getByText(/mode/i)).toBeInTheDocument();
-		expect(screen.getByText(/standard deviation/i)).toBeInTheDocument();
-		expect(screen.getByText(/coefficient of variation/i)).toBeInTheDocument();
-		expect(screen.getByText(/increasing/i)).toBeInTheDocument();
-		expect(screen.getByText(/decreasing/i)).toBeInTheDocument();
-		expect(screen.getByText(/no change/i)).toBeInTheDocument();
-	});
-
-	it("renders max/min/avg labels", () => {
-		render(<SessionTrendsPanel />);
-
-		expect(screen.getByText(/max/i)).toBeInTheDocument();
-		expect(screen.getByText(/min/i)).toBeInTheDocument();
-		expect(screen.getByText(/avg/i)).toBeInTheDocument();
-	});
-    
 	it("uses a bounded start date", () => {
 		render(<SessionTrendsPanel />);
 
@@ -53,10 +33,9 @@ describe("Session trends UI", () => {
 		expect(startDate).toHaveAttribute("min", "2002-01-02");
 	});
 
-	it("renders a session trends chart container", () => {
+	it("renders a loading spinner initially", () => {
 		render(<SessionTrendsPanel />);
-
-		expect(screen.getByTestId("session-trends-chart")).toBeInTheDocument();
+		expect(screen.getByTestId("session-trends-spinner")).toBeInTheDocument();
 	});
 
 	it("shows a predefined list of currencies", () => {
@@ -71,9 +50,13 @@ describe("Session trends UI", () => {
 			.filter((value) => value.length > 0);
 
 		expect(trimmed.length).toBeGreaterThan(0);
+        // Specifically check for some required currencies
+        expect(trimmed).toContain("USD");
+        expect(trimmed).toContain("EUR");
+        expect(trimmed).toContain("GBP");
 	});
 
-	it("disables controls and shows spinner during loading", () => {
+	it("disables controls during loading", () => {
 		render(<SessionTrendsPanel isLoading={true} />);
 
 		expect(screen.getByTestId("session-trends-spinner")).toBeInTheDocument();

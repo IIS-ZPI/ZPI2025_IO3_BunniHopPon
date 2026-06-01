@@ -40,12 +40,11 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
   const [period, setPeriod] = useState("1m");
   const [internalLoading, setInternalLoading] = useState(false);
   const [data, setData] = useState([]);
-  const [stats, setStats] = useState(null);
   const [error, setError] = useState(null);
 
   const isLoading = externalLoading || internalLoading;
 
-  const currencies = ["USD", "EUR", "GBP", "CHF", "JPY", "AUD", "CAD", "SEK"];
+  const currencies = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
   const periods = ["1w", "2w", "1m", "1q", "6m", "1y"];
 
   useEffect(() => {
@@ -56,24 +55,10 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
         const endDate = calculateEndDate(startDate, period);
         const rates = await fetchNbpRates(currency, startDate, endDate);
         setData(rates);
-
-        if (rates && rates.length > 0) {
-          setStats({
-            counts: countSessionTrends(rates),
-            median: calcMedian(rates),
-            mode: calcMode(rates),
-            stdDev: calcStdDev(rates),
-            coeffVar: calcCoeffOfVariation(rates),
-            minMaxAvg: calcMinMaxAvg(rates)
-          });
-        } else {
-          setStats(null);
-        }
       } catch (err) {
         console.error("Error loading data:", err);
         setError("Failed to fetch data: " + err.message);
         setData([]);
-        setStats(null);
       } finally {
         setInternalLoading(false);
       }
@@ -125,89 +110,49 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
         </div>
       </div>
 
-      {isLoading && <div data-testid="session-trends-spinner" className="spinner">Loading data...</div>}
-      {error && <div className="error-message">{error}</div>}
-
-      <div className="chart-container" data-testid="session-trends-chart">
-        {data && data.length > 0 ? (
-          <ResponsiveContainer width="100%" height="100%">
-            <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-              <XAxis
-                dataKey="date"
-                tick={{ fontSize: 12 }}
-                stroke="var(--text)"
-                tickFormatter={(str) => str.split("-").slice(1).join("-")}
-              />
-              <YAxis
-                domain={["auto", "auto"]}
-                tick={{ fontSize: 12 }}
-                stroke="var(--text)"
-              />
-              <Tooltip
-                contentStyle={{ backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" }}
-                itemStyle={{ color: "var(--accent)" }}
-              />
-              <Line
-                type="monotone"
-                dataKey="rate"
-                stroke="var(--accent)"
-                strokeWidth={3}
-                dot={false}
-                activeDot={{ r: 6, fill: "var(--accent)" }}
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        ) : (
-          !isLoading && <div className="no-data">No data available for the selected period.</div>
-        )}
-      </div>
-
-      <div className="stats-grid">
-        <div className="stat-item">
-          <span className="label">Median</span>
-          <span className="value">{stats ? stats.median.toFixed(4) : "-"}</span>
+      {isLoading ? (
+        <div className="chart-area-loading">
+          <div data-testid="session-trends-spinner" className="spinner">Loading data...</div>
         </div>
-        <div className="stat-item">
-          <span className="label">Mode</span>
-          <span className="value">{stats && stats.mode !== null ? stats.mode.toFixed(4) : "N/A"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Standard deviation</span>
-          <span className="value">{stats ? stats.stdDev.toFixed(4) : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Coefficient of variation</span>
-          <span className="value">{stats && stats.coeffVar !== null ? (stats.coeffVar * 100).toFixed(2) + "%" : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Increasing</span>
-          <span className="value">{stats ? stats.counts.rising : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Decreasing</span>
-          <span className="value">{stats ? stats.counts.falling : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">No change</span>
-          <span className="value">{stats ? stats.counts.unchanged : "-"}</span>
-        </div>
-      </div>
-
-      <div className="min-max-avg">
-        <div className="stat-item">
-          <span className="label">Max</span>
-          <span className="value">{stats ? stats.minMaxAvg.max.toFixed(4) : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Min</span>
-          <span className="value">{stats ? stats.minMaxAvg.min.toFixed(4) : "-"}</span>
-        </div>
-        <div className="stat-item">
-          <span className="label">Avg</span>
-          <span className="value">{stats ? stats.minMaxAvg.avg.toFixed(4) : "-"}</span>
-        </div>
-      </div>
+      ) : (
+        <>
+          {error && <div className="error-message">{error}</div>}
+          <div className="chart-container" data-testid="session-trends-chart">
+            {data && data.length > 0 ? (
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                  <XAxis
+                    dataKey="date"
+                    tick={{ fontSize: 12 }}
+                    stroke="var(--text)"
+                    tickFormatter={(str) => str.split("-").slice(1).join("-")}
+                  />
+                  <YAxis
+                    domain={["auto", "auto"]}
+                    tick={{ fontSize: 12 }}
+                    stroke="var(--text)"
+                  />
+                  <Tooltip
+                    contentStyle={{ backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" }}
+                    itemStyle={{ color: "var(--accent)" }}
+                  />
+                  <Line
+                    type="monotone"
+                    dataKey="rate"
+                    stroke="var(--accent)"
+                    strokeWidth={3}
+                    dot={false}
+                    activeDot={{ r: 6, fill: "var(--accent)" }}
+                  />
+                </LineChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="no-data">No data available for the selected period.</div>
+            )}
+          </div>
+        </>
+      )}
     </div>
   );
 }
