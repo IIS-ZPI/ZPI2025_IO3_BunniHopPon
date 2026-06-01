@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import "./sessionTrendsPanel.css";
 import {
   fetchNbpRates,
@@ -42,10 +42,9 @@ function getPeriodOffset(period) {
 
 export default function SessionTrendsPanel({ isLoading: externalLoading = false }) {
   const today = useMemo(() => new Date("2026-06-02"), []);
-  const todayStr = today.toISOString().split("T")[0];
 
   const [currency, setCurrency] = useState("USD");
-  const [startDate, setStartDate] = useState("2026-05-01");
+  const [internalStartDate, setInternalStartDate] = useState("2026-05-01");
   const [period, setPeriod] = useState("1m");
   const [internalLoading, setInternalLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -56,7 +55,6 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
   const currencies = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
   const periods = ["1w", "2w", "1m", "1q", "6m", "1y"];
 
-  
   const maxStartDate = useMemo(() => {
     const d = new Date(today);
     const offset = getPeriodOffset(period);
@@ -66,17 +64,10 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
     return d.toISOString().split("T")[0];
   }, [period, today]);
 
-  
-  useEffect(() => {
-    if (startDate > maxStartDate) {
-      setStartDate(maxStartDate);
-    }
-  }, [maxStartDate, startDate]);
+  const startDate = internalStartDate > maxStartDate ? maxStartDate : internalStartDate;
 
   useEffect(() => {
     async function loadData() {
-      if (startDate > maxStartDate) return;
-
       setInternalLoading(true);
       setError(null);
       try {
@@ -93,7 +84,7 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
     }
 
     loadData();
-  }, [currency, startDate, period, maxStartDate]);
+  }, [currency, startDate, period]);
 
   return (
     <div className="session-trends-panel">
@@ -118,7 +109,7 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
             type="date"
             id="start-date"
             value={startDate}
-            onChange={(e) => setStartDate(e.target.value)}
+            onChange={(e) => setInternalStartDate(e.target.value)}
             min="2002-01-02"
             max={maxStartDate}
             disabled={isLoading}

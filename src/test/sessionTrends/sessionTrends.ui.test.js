@@ -1,7 +1,6 @@
 import { describe, it, expect } from "@jest/globals";
-import { render, screen, waitFor } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import React from "react";
 import SessionTrendsPanel from "../../features/sessionTrends/sessionTrendsPanel.jsx";
 
 describe("Session trends UI", () => {
@@ -50,7 +49,6 @@ describe("Session trends UI", () => {
 			.filter((value) => value.length > 0);
 
 		expect(trimmed.length).toBeGreaterThan(0);
-        // Specifically check for some required currencies
         expect(trimmed).toContain("USD");
         expect(trimmed).toContain("EUR");
         expect(trimmed).toContain("GBP");

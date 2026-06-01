@@ -1,6 +1,5 @@
 import './App.css'
 import SessionTrendsPanel from './features/sessionTrends/sessionTrendsPanel.jsx'
-import React from 'react'
 
 function App() {
   return (
