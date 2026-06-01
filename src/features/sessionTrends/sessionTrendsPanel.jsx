@@ -1,13 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import "./sessionTrendsPanel.css";
 import {
   fetchNbpRates,
-  countSessionTrends,
-  calcMedian,
-  calcMode,
-  calcStdDev,
-  calcCoeffOfVariation,
-  calcMinMaxAvg
 } from "../../core/sessionTrends.js";
 import {
   ResponsiveContainer,
@@ -31,12 +25,27 @@ function calculateEndDate(startDateStr, period) {
     case "1y": end.setFullYear(start.getFullYear() + 1); break;
     default: break;
   }
-  return end.toISOString().split("T")[0];
+  return end;
+}
+
+function getPeriodOffset(period) {
+  switch (period) {
+    case "1w": return { days: 7 };
+    case "2w": return { days: 14 };
+    case "1m": return { months: 1 };
+    case "1q": return { months: 3 };
+    case "6m": return { months: 6 };
+    case "1y": return { years: 1 };
+    default: return { days: 0 };
+  }
 }
 
 export default function SessionTrendsPanel({ isLoading: externalLoading = false }) {
+  const today = useMemo(() => new Date("2026-06-02"), []);
+  const todayStr = today.toISOString().split("T")[0];
+
   const [currency, setCurrency] = useState("USD");
-  const [startDate, setStartDate] = useState("2024-01-01");
+  const [startDate, setStartDate] = useState("2026-05-01");
   const [period, setPeriod] = useState("1m");
   const [internalLoading, setInternalLoading] = useState(false);
   const [data, setData] = useState([]);
@@ -47,12 +56,31 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
   const currencies = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
   const periods = ["1w", "2w", "1m", "1q", "6m", "1y"];
 
+  
+  const maxStartDate = useMemo(() => {
+    const d = new Date(today);
+    const offset = getPeriodOffset(period);
+    if (offset.days) d.setDate(d.getDate() - offset.days);
+    if (offset.months) d.setMonth(d.getMonth() - offset.months);
+    if (offset.years) d.setFullYear(d.getFullYear() - offset.years);
+    return d.toISOString().split("T")[0];
+  }, [period, today]);
+
+  
+  useEffect(() => {
+    if (startDate > maxStartDate) {
+      setStartDate(maxStartDate);
+    }
+  }, [maxStartDate, startDate]);
+
   useEffect(() => {
     async function loadData() {
+      if (startDate > maxStartDate) return;
+
       setInternalLoading(true);
       setError(null);
       try {
-        const endDate = calculateEndDate(startDate, period);
+        const endDate = calculateEndDate(startDate, period).toISOString().split("T")[0];
         const rates = await fetchNbpRates(currency, startDate, endDate);
         setData(rates);
       } catch (err) {
@@ -65,7 +93,7 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
     }
 
     loadData();
-  }, [currency, startDate, period]);
+  }, [currency, startDate, period, maxStartDate]);
 
   return (
     <div className="session-trends-panel">
@@ -92,21 +120,34 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
             value={startDate}
             onChange={(e) => setStartDate(e.target.value)}
             min="2002-01-02"
+            max={maxStartDate}
             disabled={isLoading}
           />
         </div>
 
         <div className="time-periods">
-          {periods.map((p) => (
-            <button
-              key={p}
-              onClick={() => setPeriod(p)}
-              disabled={isLoading}
-              className={period === p ? "active" : ""}
-            >
-              {p}
-            </button>
-          ))}
+          {periods.map((p) => {
+            const tempD = new Date(today);
+            const offset = getPeriodOffset(p);
+            if (offset.days) tempD.setDate(tempD.getDate() - offset.days);
+            if (offset.months) tempD.setMonth(tempD.getMonth() - offset.months);
+            if (offset.years) tempD.setFullYear(tempD.getFullYear() - offset.years);
+            
+            // Check if CURRENT startDate is valid for THIS period p
+            const isValid = startDate <= tempD.toISOString().split("T")[0];
+
+            return (
+              <button
+                key={p}
+                onClick={() => setPeriod(p)}
+                disabled={isLoading || !isValid}
+                className={period === p ? "active" : ""}
+                title={!isValid ? "Start date is too recent for this period" : ""}
+              >
+                {p}
+              </button>
+            );
+          })}
         </div>
       </div>
 
