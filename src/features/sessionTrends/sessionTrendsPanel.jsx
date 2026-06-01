@@ -138,11 +138,11 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
                     itemStyle={{ color: "var(--accent)" }}
                   />
                   <Line
-                    type="monotone"
+                    type="linear"
                     dataKey="rate"
                     stroke="var(--accent)"
-                    strokeWidth={3}
-                    dot={false}
+                    strokeWidth={2}
+                    dot={{ r: 4, fill: "var(--accent)", strokeWidth: 0 }}
                     activeDot={{ r: 6, fill: "var(--accent)" }}
                   />
                 </LineChart>
