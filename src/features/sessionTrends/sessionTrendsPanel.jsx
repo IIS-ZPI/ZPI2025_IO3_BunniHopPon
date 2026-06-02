@@ -2,7 +2,9 @@ import { useState, useEffect, useMemo } from "react";
 import "./sessionTrendsPanel.css";
 import {
   fetchNbpRates,
+  calcMinMaxAvg,
 } from "../../core/sessionTrends.js";
+import { StatisticsModule } from "./statisticsModule.jsx";
 import {
   ResponsiveContainer,
   LineChart,
@@ -86,6 +88,13 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
     loadData();
   }, [currency, startDate, period]);
 
+  let mma = null;
+  if (data && data.length > 0) {
+    try { mma = calcMinMaxAvg(data); } catch { /* keep null */ }
+  }
+
+  const fmtVal = (n) => (n != null ? Number(n).toFixed(2) : "—");
+
   return (
     <div className="session-trends-panel">
       <div className="controls">
@@ -149,41 +158,52 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
         <>
           {error && <div className="error-message">{error}</div>}
           <div className="chart-container" data-testid="session-trends-chart">
-            {data && data.length > 0 ? (
-              <ResponsiveContainer width="100%" height="100%">
-                <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                  <XAxis
-                    dataKey="date"
-                    tick={{ fontSize: 12 }}
-                    stroke="var(--text)"
-                    tickFormatter={(str) => str.split("-").slice(1).join("-")}
-                  />
-                  <YAxis
-                    domain={["auto", "auto"]}
-                    tick={{ fontSize: 12 }}
-                    stroke="var(--text)"
-                  />
-                  <Tooltip
-                    contentStyle={{ backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" }}
-                    itemStyle={{ color: "var(--accent)" }}
-                  />
-                  <Line
-                    type="linear"
-                    dataKey="rate"
-                    stroke="var(--accent)"
-                    strokeWidth={2}
-                    dot={{ r: 4, fill: "var(--accent)", strokeWidth: 0 }}
-                    activeDot={{ r: 6, fill: "var(--accent)" }}
-                  />
-                </LineChart>
-              </ResponsiveContainer>
-            ) : (
-              <div className="no-data">No data available for the selected period.</div>
+            <div className="chart-area">
+              {data && data.length > 0 ? (
+                <ResponsiveContainer width="100%" height="100%">
+                  <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
+                    <XAxis
+                      dataKey="date"
+                      tick={{ fontSize: 12 }}
+                      stroke="var(--text)"
+                      tickFormatter={(str) => str.split("-").slice(1).join("-")}
+                    />
+                    <YAxis
+                      domain={["auto", "auto"]}
+                      tick={{ fontSize: 12 }}
+                      stroke="var(--text)"
+                    />
+                    <Tooltip
+                      contentStyle={{ backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" }}
+                      itemStyle={{ color: "var(--accent)" }}
+                    />
+                    <Line
+                      type="linear"
+                      dataKey="rate"
+                      stroke="var(--accent)"
+                      strokeWidth={2}
+                      dot={{ r: 4, fill: "var(--accent)", strokeWidth: 0 }}
+                      activeDot={{ r: 6, fill: "var(--accent)" }}
+                    />
+                  </LineChart>
+                </ResponsiveContainer>
+              ) : (
+                <div className="no-data">No data available for the selected period.</div>
+              )}
+            </div>
+            {mma && (
+              <div className="chart-badges">
+                <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma.max)}</span>
+                <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma.min)}</span>
+                <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma.avg)}</span>
+              </div>
             )}
           </div>
         </>
       )}
+
+      <StatisticsModule data={data} />
     </div>
   );
 }
