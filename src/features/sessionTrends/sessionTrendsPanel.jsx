@@ -192,16 +192,15 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
                 <div className="no-data">No data available for the selected period.</div>
               )}
             </div>
-            {mma && (
-              <div className="chart-badges">
-                <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma.max)}</span>
-                <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma.min)}</span>
-                <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma.avg)}</span>
-              </div>
-            )}
           </div>
         </>
       )}
+
+      <div className="chart-badges">
+        <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma?.max)}</span>
+        <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma?.min)}</span>
+        <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma?.avg)}</span>
+      </div>
 
       <StatisticsModule data={data} />
     </div>
