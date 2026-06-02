@@ -7,4 +7,5 @@ export default defineConfig({
   optimizeDeps: {
     include: ['recharts'],
   },
+  base: '/ZPI2025_IO3_BunniHopPon/'
 })
