@@ -8,7 +8,8 @@
     "build": "vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.cjs",
+    "test": "npm run test:logic && npm run test:ui",
+    "test:logic": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.cjs",
     "test:ui": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.ui.config.cjs",
     "test:cov": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.cjs --coverage"
   },

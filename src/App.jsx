@@ -1,5 +1,5 @@
 import './App.css'
-import SessionTrendsPanel from './features/sessionTrends/sessionTrendsPanel.jsx'
+import { SessionTrendsPanel } from './features/sessionTrends/sessionTrendsPanel.jsx'
 
 function App() {
   return (

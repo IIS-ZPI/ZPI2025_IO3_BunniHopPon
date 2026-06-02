@@ -8,7 +8,7 @@ module.exports = {
   transform: {
     "^.+\\.(js|jsx|ts|tsx)$": ["babel-jest", {
       presets: [
-        ["@babel/preset-env", { targets: { node: "current" } }],
+        ["@babel/preset-env", { targets: { node: "current" }, modules: "auto" }],
         ["@babel/preset-react", { runtime: "automatic" }]
       ]
     }]

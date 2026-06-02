@@ -40,7 +40,7 @@ function getPeriodOffset(period) {
   }
 }
 
-export default function SessionTrendsPanel({ isLoading: externalLoading = false }) {
+export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
   const today = useMemo(() => new Date("2026-06-02"), []);
 
   const [currency, setCurrency] = useState("USD");

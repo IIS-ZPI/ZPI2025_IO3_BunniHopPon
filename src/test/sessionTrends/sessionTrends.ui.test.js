@@ -1,11 +1,12 @@
 import { describe, it, expect } from "@jest/globals";
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import SessionTrendsPanel from "../../features/sessionTrends/sessionTrendsPanel.jsx";
+import React from "react";
+import { SessionTrendsPanel } from "../../features/sessionTrends/sessionTrendsPanel.jsx";
 
 describe("Session trends UI", () => {
 	it("renders core controls", () => {
-		render(<SessionTrendsPanel />);
+		render(React.createElement(SessionTrendsPanel));
 
 		expect(screen.getByLabelText(/exchange rate/i)).toBeInTheDocument();
 		expect(screen.getByLabelText(/start date/i)).toBeInTheDocument();
@@ -19,26 +20,26 @@ describe("Session trends UI", () => {
 	});
 
 	it("does not expose extra analysis periods", () => {
-		render(<SessionTrendsPanel />);
+		render(React.createElement(SessionTrendsPanel));
 
 		expect(screen.queryByRole("button", { name: /3m/i })).toBeNull();
 		expect(screen.queryByRole("button", { name: /2y/i })).toBeNull();
 	});
 
 	it("uses a bounded start date", () => {
-		render(<SessionTrendsPanel />);
+		render(React.createElement(SessionTrendsPanel));
 
 		const startDate = screen.getByLabelText(/start date/i);
 		expect(startDate).toHaveAttribute("min", "2002-01-02");
 	});
 
 	it("renders a loading spinner initially", () => {
-		render(<SessionTrendsPanel />);
+		render(React.createElement(SessionTrendsPanel));
 		expect(screen.getByTestId("session-trends-spinner")).toBeInTheDocument();
 	});
 
 	it("shows a predefined list of currencies", () => {
-		render(<SessionTrendsPanel />);
+		render(React.createElement(SessionTrendsPanel));
 
 		const select = screen.getByLabelText(/exchange rate/i);
 		const options = Array.from(select.querySelectorAll("option")).map(
@@ -55,7 +56,7 @@ describe("Session trends UI", () => {
 	});
 
 	it("disables controls during loading", () => {
-		render(<SessionTrendsPanel isLoading={true} />);
+		render(React.createElement(SessionTrendsPanel, { isLoading: true }));
 
 		expect(screen.getByTestId("session-trends-spinner")).toBeInTheDocument();
 		expect(screen.getByLabelText(/exchange rate/i)).toBeDisabled();
@@ -65,7 +66,7 @@ describe("Session trends UI", () => {
 
 	it("prevents manual currency input", async () => {
 		const user = userEvent.setup();
-		render(<SessionTrendsPanel />);
+		render(React.createElement(SessionTrendsPanel));
 
 		const select = screen.getByLabelText(/exchange rate/i);
 		await user.type(select, "ABC");
