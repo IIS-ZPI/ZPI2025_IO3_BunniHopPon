@@ -1,50 +1,48 @@
 export function getHistogramDistribution(points) {
-  if (!Array.isArray(points) || points.length < 2) {
-    throw new Error("Insufficient points: at least two data points are required to calculate changes.");
-  }
-
-  const bins = new Map();
-  
-  for (let i = -6; i <= 6; i++) {
-    let min = i * 0.5;
-    let max = (i + 1) * 0.5;
-    
-    // Convert -0 to 0 to prevent JavaScript duplicate key issues ("-0.0" vs "0.0")
-    min = min === 0 ? 0 : min;
-    max = max === 0 ? 0 : max;
-
-    bins.set(`${min.toFixed(1)}_${max.toFixed(1)}`, { min, max, count: 0 });
-  }
-
-  for (let i = 1; i < points.length; i++) {
-    const prev = points[i - 1]?.rate;
-    const curr = points[i]?.rate;
-
-    if (
-      typeof prev !== "number" || typeof curr !== "number" ||
-      Number.isNaN(prev) || Number.isNaN(curr) ||
-      !Number.isFinite(prev) || !Number.isFinite(curr) ||
-      prev <= 0 || curr < 0 // prev must be > 0 to prevent division by zero
-    ) {
-      throw new Error("Invalid rate: rates must be positive finite numbers and previous rate must be strictly greater than zero.");
+    if (!Array.isArray(points) || points.length < 2) {
+        throw new Error("Insufficient points: at least two data points are required to calculate changes.");
     }
 
-    const change = ((curr - prev) / prev) * 100;
+    const bins = new Map();
 
-    let minBin = Math.floor(change / 0.5) * 0.5;
-    let maxBin = minBin + 0.5;
+    for (let i = -6; i <= 6; i++) {
+        let min = i * 0.5;
+        let max = (i + 1) * 0.5;
 
-    // Convert -0 to 0
-    minBin = minBin === 0 ? 0 : minBin;
-    maxBin = maxBin === 0 ? 0 : maxBin;
+        min = min === 0 ? 0 : min;
+        max = max === 0 ? 0 : max;
 
-    const key = `${minBin.toFixed(1)}_${maxBin.toFixed(1)}`;
-
-    if (!bins.has(key)) {
-      bins.set(key, { min: minBin, max: maxBin, count: 0 });
+        bins.set(`${min.toFixed(1)}_${max.toFixed(1)}`, { min, max, count: 0 });
     }
-    bins.get(key).count++;
-  }
 
-  return Array.from(bins.values()).sort((a, b) => a.min - b.min);
+    for (let i = 1; i < points.length; i++) {
+        const prev = points[i - 1]?.rate;
+        const curr = points[i]?.rate;
+
+        if (
+            typeof prev !== "number" || typeof curr !== "number" ||
+            Number.isNaN(prev) || Number.isNaN(curr) ||
+            !Number.isFinite(prev) || !Number.isFinite(curr) ||
+            prev <= 0 || curr < 0
+        ) {
+            throw new Error("Invalid rate: rates must be positive finite numbers and previous rate must be strictly greater than zero.");
+        }
+
+        const change = ((curr - prev) / prev) * 100;
+
+        let minBin = Math.floor(change / 0.5) * 0.5;
+        let maxBin = minBin + 0.5;
+
+        minBin = minBin === 0 ? 0 : minBin;
+        maxBin = maxBin === 0 ? 0 : maxBin;
+
+        const key = `${minBin.toFixed(1)}_${maxBin.toFixed(1)}`;
+
+        if (!bins.has(key)) {
+            bins.set(key, { min: minBin, max: maxBin, count: 0 });
+        }
+        bins.get(key).count++;
+    }
+
+    return Array.from(bins.values()).sort((a, b) => a.min - b.min);
 }
