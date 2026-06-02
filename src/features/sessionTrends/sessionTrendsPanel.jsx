@@ -133,7 +133,6 @@ export default function SessionTrendsPanel({ isLoading: externalLoading = false 
             if (offset.months) tempD.setMonth(tempD.getMonth() - offset.months);
             if (offset.years) tempD.setFullYear(tempD.getFullYear() - offset.years);
             
-            // Check if CURRENT startDate is valid for THIS period p
             const isValid = startDate <= tempD.toISOString().split("T")[0];
 
             return (
