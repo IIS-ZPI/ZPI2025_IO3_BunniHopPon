@@ -18,7 +18,6 @@ export function calculateDailyChanges(points) {
         }
 
         const rawChange = ((curr - prev) / prev) * 100;
-        // Mitigate JS floating-point arithmetic errors (e.g., 4.02 - 4.0 = 0.019999999...)
         const change = Math.round(rawChange * 10000) / 10000;
         changes.push(change);
     }

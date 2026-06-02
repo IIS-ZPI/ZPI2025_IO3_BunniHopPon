@@ -31,8 +31,8 @@ describe("histogramDistribution module", () => {
         it("calculates percentage changes accurately with JS float protection", () => {
             const points = [
                 { rate: 4.0 },
-                { rate: 4.02 }, // +0.5%
-                { rate: 4.0 },  // -0.4975%
+                { rate: 4.02 },
+                { rate: 4.0 },
             ];
             const changes = calculateDailyChanges(points);
             expect(changes[0]).toBe(0.5);
@@ -46,7 +46,7 @@ describe("histogramDistribution module", () => {
             expect(bins.size).toBe(13);
             expect(bins.has("-3.0_-2.5")).toBe(true);
             expect(bins.has("3.0_3.5")).toBe(true);
-            expect(bins.has("-0.0_0.5")).toBe(false); // Should map to "0.0_0.5"
+            expect(bins.has("-0.0_0.5")).toBe(false);
             expect(bins.has("0.0_0.5")).toBe(true);
         });
     });
@@ -89,7 +89,7 @@ describe("histogramDistribution module", () => {
             
             expect(bins.get("0.0_0.5").count).toBe(3);
             expect(bins.get("-1.5_-1.0").count).toBe(1);
-            expect(bins.get("1.0_1.5").count).toBe(0); // empty default bin
+            expect(bins.get("1.0_1.5").count).toBe(0);
         });
 
         it("dynamically generates new bins if change is out of bounds", () => {
@@ -99,7 +99,7 @@ describe("histogramDistribution module", () => {
             
             expect(bins.get("50.0_50.5").count).toBe(1);
             expect(bins.get("-50.5_-50.0").count).toBe(1);
-            expect(bins.size).toBe(15); // 13 defaults + 2 dynamic
+            expect(bins.size).toBe(15);
         });
     });
 
@@ -110,9 +110,9 @@ describe("histogramDistribution module", () => {
                 code: "USD",
                 rates: [
                     { effectiveDate: "2024-01-01", mid: 4.0 },
-                    { effectiveDate: "2024-01-02", mid: 4.04 }, // +1.0%
-                    { effectiveDate: "2024-01-03", mid: 4.1208 }, // +2.0%
-                    { effectiveDate: "2024-01-04", mid: 4.038384 } // -2.0%
+                    { effectiveDate: "2024-01-02", mid: 4.04 },
+                    { effectiveDate: "2024-01-03", mid: 4.1208 },
+                    { effectiveDate: "2024-01-04", mid: 4.038384 }
                 ]
             };
 
@@ -121,11 +121,10 @@ describe("histogramDistribution module", () => {
                 json: async () => nbpResponse
             });
 
-            // Using the actual fetchNbpRates to generate the points structure
             const points = await fetchNbpRates("USD", "2024-01-01", "2024-01-04", fetchMock);
             const result = getHistogramDistribution(points);
 
-            expect(result.length).toBe(13); // No extreme outliers added
+            expect(result.length).toBe(13);
             expect(result.find(b => b.min === 1.0 && b.max === 1.5).count).toBe(1);
             expect(result.find(b => b.min === 2.0 && b.max === 2.5).count).toBe(1);
             expect(result.find(b => b.min === -2.0 && b.max === -1.5).count).toBe(1);
