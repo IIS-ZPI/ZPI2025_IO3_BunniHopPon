@@ -28,7 +28,9 @@ export function getHistogramDistribution(points) {
             throw new Error("Invalid rate: rates must be positive finite numbers and previous rate must be strictly greater than zero.");
         }
 
-        const change = ((curr - prev) / prev) * 100;
+        const rawChange = ((curr - prev) / prev) * 100;
+        // Mitigate JS floating-point arithmetic errors (e.g., 4.02 - 4.0 = 0.019999999...)
+        const change = Math.round(rawChange * 10000) / 10000;
 
         let minBin = Math.floor(change / 0.5) * 0.5;
         let maxBin = minBin + 0.5;
