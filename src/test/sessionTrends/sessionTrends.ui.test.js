@@ -26,6 +26,26 @@ describe("Session trends UI", () => {
 		expect(screen.queryByRole("button", { name: /2y/i })).toBeNull();
 	});
 
+	it("renders fixed statistics badges", () => {
+		render(React.createElement(SessionTrendsPanel));
+
+		expect(screen.getByText(/median/i)).toBeInTheDocument();
+		expect(screen.getByText(/mode/i)).toBeInTheDocument();
+		expect(screen.getByText(/standard deviation/i)).toBeInTheDocument();
+		expect(screen.getByText(/coefficient of variation/i)).toBeInTheDocument();
+		expect(screen.getByText(/increasing/i)).toBeInTheDocument();
+		expect(screen.getByText(/decreasing/i)).toBeInTheDocument();
+		expect(screen.getByText(/no change/i)).toBeInTheDocument();
+	});
+
+	it("renders max/min/avg labels", () => {
+		render(React.createElement(SessionTrendsPanel));
+
+		expect(screen.getByText(/max/i)).toBeInTheDocument();
+		expect(screen.getByText(/min/i)).toBeInTheDocument();
+		expect(screen.getByText(/avg/i)).toBeInTheDocument();
+	});
+	
 	it("uses a bounded start date", () => {
 		render(React.createElement(SessionTrendsPanel));
 
