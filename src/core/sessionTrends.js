@@ -98,20 +98,20 @@ export function calcStdDev(points) {
 }
 
 export function calcCoeffOfVariation(points) {
-  const rates = extractAndValidateRates(points)
+  const rates = extractAndValidateRates(points);
 
-  const avg = rates.reduce((acc, curr) => acc + curr, 0) / rates.length
-  if(avg === 0) return null
+  const avg = rates.reduce((acc, curr) => acc + curr, 0) / rates.length;
+  if (avg === 0) return null;
 
-  return calcStdDev(points) / avg
- }
+  return calcStdDev(points) / avg;
+}
 
 export function calcMinMaxAvg(points) {
   const rates = extractAndValidateRates(points);
 
-  const avg = rates.reduce((acc, curr) => acc + curr, 0) / rates.length
-  const min = Math.min(...rates.values(rates))
-  const max = Math.max(...rates.values(rates))
+  const avg = rates.reduce((acc, curr) => acc + curr, 0) / rates.length;
+  const min = Math.min(...rates);
+  const max = Math.max(...rates);
 
-  return { min, max, avg }
- }
+  return { min, max, avg };
+}

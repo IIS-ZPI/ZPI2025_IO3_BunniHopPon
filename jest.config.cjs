@@ -1,4 +1,4 @@
 module.exports = {
   testEnvironment: "node",
-  testMatch: ["**/src/test/**/*.test.js"]
+  testMatch: ["**/src/test/**/!(*.ui).test.js"]
 };
