@@ -146,33 +146,44 @@ export function HistogramPanel() {
 
       <div className="histogram-controls">
         <div className="histogram-currency-selects">
-          <CurrencySelect
-            value={currency1}
-            onChange={(e) => setCurrency1(e.target.value)}
-            disabled={loading}
-          />
-          <CurrencySelect
-            value={currency2}
-            onChange={(e) => setCurrency2(e.target.value)}
-            disabled={loading}
-          />
+          <div className="histogram-date-picker">
+            <label htmlFor="base-currency-select">Base currency</label>
+            <CurrencySelect
+              id="base-currency-select"
+              value={currency1}
+              onChange={(e) => setCurrency1(e.target.value)}
+              disabled={loading}
+            />
+          </div>
+          <div className="histogram-date-picker">
+            <label htmlFor="quote-currency-select">Quote currency</label>
+            <CurrencySelect
+              id="quote-currency-select"
+              value={currency2}
+              onChange={(e) => setCurrency2(e.target.value)}
+              disabled={loading}
+            />
+          </div>
         </div>
 
-        <div className="histogram-mode-toggle">
-          <button
-            className={mode === "monthly" ? "active" : ""}
-            onClick={() => setMode("monthly")}
-            disabled={loading}
-          >
-            Monthly
-          </button>
-          <button
-            className={mode === "quarterly" ? "active" : ""}
-            onClick={() => setMode("quarterly")}
-            disabled={loading}
-          >
-            Quarterly
-          </button>
+        <div className="histogram-date-picker">
+          <label>Calculation period</label>
+          <div className="histogram-mode-toggle">
+            <button
+              className={mode === "monthly" ? "active" : ""}
+              onClick={() => setMode("monthly")}
+              disabled={loading}
+            >
+              Monthly
+            </button>
+            <button
+              className={mode === "quarterly" ? "active" : ""}
+              onClick={() => setMode("quarterly")}
+              disabled={loading}
+            >
+              Quarterly
+            </button>
+          </div>
         </div>
 
         {mode === "quarterly" ? (
