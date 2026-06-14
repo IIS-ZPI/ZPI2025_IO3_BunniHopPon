@@ -362,9 +362,6 @@ describe("calcMinMaxAvg edge cases", () => {
 describe("chunkDateRange", () => {
   it("splits a date range into chunks of maximum 93 days", () => {
     const chunks = chunkDateRange("2024-01-01", "2024-05-01", 93);
-    // Jan 1 to May 1 is 121 days.
-    // Chunk 1: Jan 1 to Apr 2 (93 days)
-    // Chunk 2: Apr 3 to May 1 (29 days)
     expect(chunks.length).toBe(2);
     expect(chunks[0].start).toBe("2024-01-01");
     expect(chunks[0].end).toBe("2024-04-02");
