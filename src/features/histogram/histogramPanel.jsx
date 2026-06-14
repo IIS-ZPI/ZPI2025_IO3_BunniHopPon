@@ -83,19 +83,21 @@ export function HistogramPanel() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const quarterOptions = useMemo(() => {
+  const monthYearOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear();
     const opts = [];
-    for (let y = 2025; y >= 2002; y--) {
+    for (let y = currentYear; y >= 2002; y--) opts.push(y);
+    return opts;
+  }, []);
+
+  const quarterOptions = useMemo(() => {
+    const currentYear = new Date().getFullYear();
+    const opts = [];
+    for (let y = currentYear; y >= 2002; y--) {
       for (let q = 4; q >= 1; q--) {
         opts.push(`${y}-Q${q}`);
       }
     }
-    return opts;
-  }, []);
-
-  const monthYearOptions = useMemo(() => {
-    const opts = [];
-    for (let y = 2025; y >= 2002; y--) opts.push(y);
     return opts;
   }, []);
 

@@ -8,9 +8,11 @@ const MONTH_NAMES = [
   "July", "August", "September", "October", "November", "December",
 ];
 
+const CURRENT_YEAR = new Date().getFullYear();
+
 const QUARTER_OPTIONS = (() => {
   const opts = [];
-  for (let y = 2025; y >= 2002; y--)
+  for (let y = CURRENT_YEAR; y >= 2002; y--)
     for (let q = 4; q >= 1; q--)
       opts.push({ value: `${y}-Q${q}`, label: `${y} Q${q}` });
   return opts;
@@ -18,7 +20,7 @@ const QUARTER_OPTIONS = (() => {
 
 const MONTH_OPTIONS = (() => {
   const opts = [];
-  for (let y = 2025; y >= 2002; y--)
+  for (let y = CURRENT_YEAR; y >= 2002; y--)
     for (let m = 11; m >= 0; m--)
       opts.push({
         value: `${y}-${String(m + 1).padStart(2, "0")}`,
