@@ -103,42 +103,31 @@
   color: var(--text-h);
 }
 
-.date-picker-input {
-  display: flex;
-  align-items: center;
+.histogram-date-select {
+  padding: 10px 14px;
   border: 1px solid var(--border);
   border-radius: 8px;
-  padding: 0 14px;
   background: var(--bg);
-  gap: 8px;
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
   transition: border-color 0.2s;
 }
 
-.date-picker-input:focus-within {
+.histogram-date-select:focus {
   border-color: var(--accent);
 }
 
-.calendar-icon {
-  font-size: 16px;
-  pointer-events: none;
-  flex-shrink: 0;
-}
-
-.date-picker-input select {
-  border: none;
-  outline: none;
-  background: transparent;
-  padding: 10px 4px;
-  color: var(--text-h);
-  font-family: var(--sans);
-  font-size: 14px;
-  cursor: pointer;
-  min-width: 100px;
-}
-
-.date-picker-input select:disabled {
+.histogram-date-select:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+.histogram-month-selects {
+  display: flex;
+  gap: 8px;
 }
 
 .histogram-chart-container {

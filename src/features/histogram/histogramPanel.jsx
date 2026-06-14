@@ -192,27 +192,25 @@ export function HistogramPanel() {
         {mode === "quarterly" ? (
           <div className="histogram-date-picker">
             <label>Quarter</label>
-            <div className="date-picker-input">
-              <span className="calendar-icon">📅</span>
-              <select
-                value={quarterValue}
-                onChange={(e) => setQuarterValue(e.target.value)}
-                disabled={loading}
-              >
-                {quarterOptions.map((q) => (
-                  <option key={q} value={q}>
-                    {q.replace("-Q", " Q")}
-                  </option>
-                ))}
-              </select>
-            </div>
+            <select
+              className="histogram-date-select"
+              value={quarterValue}
+              onChange={(e) => setQuarterValue(e.target.value)}
+              disabled={loading}
+            >
+              {quarterOptions.map((q) => (
+                <option key={q} value={q}>
+                  {q.replace("-Q", " Q")}
+                </option>
+              ))}
+            </select>
           </div>
         ) : (
           <div className="histogram-date-picker">
             <label>Month</label>
-            <div className="date-picker-input">
-              <span className="calendar-icon">📅</span>
+            <div className="histogram-month-selects">
               <select
+                className="histogram-date-select"
                 value={monthNum}
                 onChange={(e) => setMonthNum(Number(e.target.value))}
                 disabled={loading}
@@ -222,6 +220,7 @@ export function HistogramPanel() {
                 ))}
               </select>
               <select
+                className="histogram-date-select"
                 value={monthYear}
                 onChange={(e) => setMonthYear(Number(e.target.value))}
                 disabled={loading}
