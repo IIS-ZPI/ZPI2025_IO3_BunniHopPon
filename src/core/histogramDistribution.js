@@ -71,3 +71,20 @@ export function getHistogramDistribution(points) {
     groupChangesIntoBins(changes, bins);
     return Array.from(bins.values()).sort((a, b) => a.min - b.min);
 }
+
+export function calculateCrossRateChanges(rates1, rates2) {
+    const map2 = new Map(rates2.map((p) => [p.date, p.rate]));
+    const aligned = rates1
+        .filter((p) => map2.has(p.date))
+        .map((p) => ({ date: p.date, rate: p.rate / map2.get(p.date) }));
+    if (aligned.length < 2) return [];
+    return calculateDailyChanges(aligned);
+}
+
+export function getCrossRateHistogram(rates1, rates2) {
+    const changes = calculateCrossRateChanges(rates1, rates2);
+    if (changes.length === 0) return [];
+    const bins = initializeBins();
+    groupChangesIntoBins(changes, bins);
+    return Array.from(bins.values()).sort((a, b) => a.min - b.min);
+}
