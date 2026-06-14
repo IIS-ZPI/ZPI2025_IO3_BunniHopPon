@@ -190,7 +190,7 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
                         ticks: {
                           color: "#6b6375",
                           font: { size: 12 },
-                          callback: function (val, index) {
+                          callback: function (val) {
                             const label = this.getLabelForValue(val);
                             return label.split("-").slice(1).join("-");
                           },
