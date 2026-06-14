@@ -2,6 +2,7 @@ import { useState } from 'react'
 import './App.css'
 import { SessionTrendsPanel } from './features/sessionTrends/sessionTrendsPanel.jsx'
 import { HistogramPanel } from './features/histogram/histogramPanel.jsx'
+import logo from './assets/logo.jpg'
 
 const PAGES = [
   { id: 'trends', label: 'Session Trends' },
@@ -21,7 +22,10 @@ function App() {
         alignItems: 'center',
         justifyContent: 'space-between',
       }}>
-        <h1 style={{ margin: 0, color: 'var(--text-h)', fontSize: '40px' }}>NBP Analytics</h1>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <img src={logo} alt="Logo" style={{ height: '40px', width: 'auto' }} />
+          <h1 style={{ margin: 0, color: 'var(--text-h)', fontSize: '40px' }}>NBP Analytics</h1>
+        </div>
         <select
           value={page}
           onChange={(e) => setPage(e.target.value)}
