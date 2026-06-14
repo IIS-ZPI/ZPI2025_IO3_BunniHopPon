@@ -55,16 +55,16 @@ function formatBinLabel(min) {
   return `${min.toFixed(1)}%`;
 }
 
-
-export function HistogramPanel() {
+export function HistogramPanel({ onLoadingChange }) {
   const now = useMemo(() => new Date(), []);
   const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
+  const currentMonth = now.getMonth() + 1; // 1-indexed
 
   const [mode, setMode] = useState("quarterly");
   const [currency1, setCurrency1] = useState("USD");
   const [currency2, setCurrency2] = useState("EUR");
-  
+
+  // Initial values based on current date
   const initialQuarter = (() => {
     const q = Math.floor((currentMonth - 1) / 3) + 1;
     if (q === 1) return `${currentYear - 1}-Q4`;
@@ -74,11 +74,18 @@ export function HistogramPanel() {
   const [quarterValue, setQuarterValue] = useState(initialQuarter);
   const [monthYear, setMonthYear] = useState(currentMonth === 1 ? currentYear - 1 : currentYear);
   const [monthNum, setMonthNum] = useState(currentMonth === 1 ? 12 : currentMonth - 1);
-  
+
   const [rates1, setRates1] = useState([]);
   const [rates2, setRates2] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(loading);
+    }
+  }, [loading, onLoadingChange]);
+
 
   const monthYearOptions = useMemo(() => {
     const opts = [];

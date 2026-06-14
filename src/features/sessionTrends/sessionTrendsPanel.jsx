@@ -55,17 +55,26 @@ function getPeriodOffset(period) {
   }
 }
 
-export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
+export function SessionTrendsPanel({ 
+  isLoading: externalLoading = false,
+  onLoadingChange
+}) {
   const today = useMemo(() => new Date(), []);
 
   const [currency, setCurrency] = useState("USD");
   const [internalStartDate, setInternalStartDate] = useState("2026-05-01");
   const [period, setPeriod] = useState("1m");
-  const [internalLoading, setInternalLoading] = useState(false);
+  const [internalLoading, setInternalLoading] = useState(true);
   const [data, setData] = useState([]);
   const [error, setError] = useState(null);
 
   const isLoading = externalLoading || internalLoading;
+
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(isLoading);
+    }
+  }, [isLoading, onLoadingChange]);
 
   const periods = ["1w", "2w", "1m", "1q", "6m", "1y"];
 
