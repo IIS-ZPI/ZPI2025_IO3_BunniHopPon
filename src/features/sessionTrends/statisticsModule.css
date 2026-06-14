@@ -3,7 +3,7 @@
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 0 32px 32px;
+  padding: 0;
 }
 
 .stats-grid {
@@ -75,7 +75,7 @@
 
 @media (max-width: 520px) {
   .statistics-module {
-    padding: 0 16px 16px;
+    padding: 0;
   }
 
   .stats-grid--4,

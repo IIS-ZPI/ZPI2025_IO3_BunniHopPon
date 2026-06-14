@@ -4,16 +4,29 @@ import {
   fetchNbpRates,
   calcMinMaxAvg,
 } from "../../core/sessionTrends.js";
+import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import { StatisticsModule } from "./statisticsModule.jsx";
 import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip
-} from "recharts";
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function calculateEndDate(startDateStr, period) {
   const start = new Date(startDateStr);
@@ -43,7 +56,7 @@ function getPeriodOffset(period) {
 }
 
 export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
-  const today = useMemo(() => new Date("2026-06-02"), []);
+  const today = useMemo(() => new Date(), []);
 
   const [currency, setCurrency] = useState("USD");
   const [internalStartDate, setInternalStartDate] = useState("2026-05-01");
@@ -54,7 +67,6 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
 
   const isLoading = externalLoading || internalLoading;
 
-  const currencies = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
   const periods = ["1w", "2w", "1m", "1q", "6m", "1y"];
 
   const maxStartDate = useMemo(() => {
@@ -78,7 +90,15 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
         setData(rates);
       } catch (err) {
         console.error("Error loading data:", err);
-        setError("Failed to fetch data: " + err.message);
+        const isNetworkError = !navigator.onLine || 
+          err.message.toLowerCase().includes("failed to fetch") || 
+          err.message.toLowerCase().includes("networkerror") ||
+          err.message.toLowerCase().includes("network error");
+        if (isNetworkError) {
+          setError("No internet connection. Could not fetch data from NBP API.");
+        } else {
+          setError("Failed to fetch data: " + err.message);
+        }
         setData([]);
       } finally {
         setInternalLoading(false);
@@ -97,19 +117,16 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
 
   return (
     <div className="session-trends-panel">
+      <h2 className="session-trends-title">Rising, falling, and unchanged sessions analysis</h2>
       <div className="controls">
         <div className="control-group">
           <label htmlFor="currency-select">Exchange rate</label>
-          <select
+          <CurrencySelect
             id="currency-select"
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
             disabled={isLoading}
-          >
-            {currencies.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
+          />
         </div>
 
         <div className="control-group">
@@ -125,28 +142,31 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
           />
         </div>
 
-        <div className="time-periods">
-          {periods.map((p) => {
-            const tempD = new Date(today);
-            const offset = getPeriodOffset(p);
-            if (offset.days) tempD.setDate(tempD.getDate() - offset.days);
-            if (offset.months) tempD.setMonth(tempD.getMonth() - offset.months);
-            if (offset.years) tempD.setFullYear(tempD.getFullYear() - offset.years);
-            
-            const isValid = startDate <= tempD.toISOString().split("T")[0];
+        <div className="control-group">
+          <label>Time period</label>
+          <div className="time-periods">
+            {periods.map((p) => {
+              const tempD = new Date(today);
+              const offset = getPeriodOffset(p);
+              if (offset.days) tempD.setDate(tempD.getDate() - offset.days);
+              if (offset.months) tempD.setMonth(tempD.getMonth() - offset.months);
+              if (offset.years) tempD.setFullYear(tempD.getFullYear() - offset.years);
+              
+              const isValid = startDate <= tempD.toISOString().split("T")[0];
 
-            return (
-              <button
-                key={p}
-                onClick={() => setPeriod(p)}
-                disabled={isLoading || !isValid}
-                className={period === p ? "active" : ""}
-                title={!isValid ? "Start date is too recent for this period" : ""}
-              >
-                {p}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={p}
+                  onClick={() => setPeriod(p)}
+                  disabled={isLoading || !isValid}
+                  className={period === p ? "active" : ""}
+                  title={!isValid ? "Start date is too recent for this period" : ""}
+                >
+                  {p}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
@@ -160,34 +180,61 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
           <div className="chart-container" data-testid="session-trends-chart">
             <div className="chart-area">
               {data && data.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                    <XAxis
-                      dataKey="date"
-                      tick={{ fontSize: 12 }}
-                      stroke="var(--text)"
-                      tickFormatter={(str) => str.split("-").slice(1).join("-")}
-                    />
-                    <YAxis
-                      domain={["auto", "auto"]}
-                      tick={{ fontSize: 12 }}
-                      stroke="var(--text)"
-                    />
-                    <Tooltip
-                      contentStyle={{ backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" }}
-                      itemStyle={{ color: "var(--accent)" }}
-                    />
-                    <Line
-                      type="linear"
-                      dataKey="rate"
-                      stroke="var(--accent)"
-                      strokeWidth={2}
-                      dot={{ r: 4, fill: "var(--accent)", strokeWidth: 0 }}
-                      activeDot={{ r: 6, fill: "var(--accent)" }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Line
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { display: false },
+                      tooltip: {
+                        backgroundColor: "#fff",
+                        titleColor: "#08060d",
+                        bodyColor: "#2563eb",
+                        borderColor: "#e5e4e7",
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false,
+                      },
+                    },
+                    scales: {
+                      x: {
+                        grid: { display: false },
+                        ticks: {
+                          color: "#6b6375",
+                          font: { size: 12 },
+                          callback: function (val) {
+                            const label = this.getLabelForValue(val);
+                            return label.split("-").slice(1).join("-");
+                          },
+                        },
+                      },
+                      y: {
+                        grid: { color: "#e5e4e7" },
+                        ticks: {
+                          color: "#6b6375",
+                          font: { size: 12 },
+                        },
+                      },
+                    },
+                  }}
+                  data={{
+                    labels: data.map((d) => d.date),
+                    datasets: [
+                      {
+                        label: "Rate",
+                        data: data.map((d) => d.rate),
+                        borderColor: "#2563eb",
+                        backgroundColor: "#2563eb",
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: "#2563eb",
+                        pointBorderWidth: 0,
+                        pointHoverRadius: 6,
+                        tension: 0,
+                      },
+                    ],
+                  }}
+                />
               ) : (
                 <div className="no-data">No data available for the selected period.</div>
               )}
