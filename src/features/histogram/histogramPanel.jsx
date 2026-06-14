@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import "./histogramPanel.css";
 import { fetchNbpRates } from "../../core/sessionTrends.js";
-import { getHistogramDistribution } from "../../core/histogramDistribution.js";
+import { getHistogramDistribution, getCrossRateHistogram } from "../../core/histogramDistribution.js";
 import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import {
   Chart as ChartJS,
@@ -55,21 +55,6 @@ function formatBinLabel(min) {
   return `${min.toFixed(1)}%`;
 }
 
-function buildChartData(bins1, bins2) {
-  const map = new Map();
-  const addBins = (bins, key) => {
-    for (const bin of bins) {
-      const label = formatBinLabel(bin.min);
-      if (!map.has(bin.min)) map.set(bin.min, { label, count1: 0, count2: 0 });
-      map.get(bin.min)[key] = bin.count;
-    }
-  };
-  addBins(bins1, "count1");
-  addBins(bins2, "count2");
-  return [...map.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([, v]) => v);
-}
 
 export function HistogramPanel() {
   const now = useMemo(() => new Date(), []);
@@ -153,14 +138,22 @@ export function HistogramPanel() {
     load();
   }, [currency1, currency2, mode, quarterValue, monthYear, monthNum]);
 
-  const chartData = useMemo(() => {
-    const bins1 = rates1.length >= 2 ? getHistogramDistribution(rates1) : [];
-    const bins2 = rates2.length >= 2 ? getHistogramDistribution(rates2) : [];
-    if (bins1.length === 0 && bins2.length === 0) return [];
-    return buildChartData(bins1, bins2);
-  }, [rates1, rates2]);
+  const pairLabel = currency1 === currency2
+    ? `${currency1}/PLN`
+    : `${currency1}/${currency2}`;
 
-  const showBothCurrencies = currency1 !== currency2 && rates2.length >= 2;
+  const chartData = useMemo(() => {
+    let bins;
+    if (currency1 === currency2) {
+      if (rates1.length < 2) return [];
+      bins = getHistogramDistribution(rates1);
+    } else {
+      if (rates1.length < 2 || rates2.length < 2) return [];
+      bins = getCrossRateHistogram(rates1, rates2);
+    }
+    if (bins.length === 0) return [];
+    return bins.map((b) => ({ label: formatBinLabel(b.min), count: b.count }));
+  }, [rates1, rates2, currency1, currency2]);
 
   return (
     <div className="histogram-panel">
@@ -271,7 +264,7 @@ export function HistogramPanel() {
               maintainAspectRatio: false,
               plugins: {
                 legend: {
-                  display: showBothCurrencies,
+                  display: true,
                   position: "top",
                   labels: {
                     color: "#6b6375",
@@ -310,23 +303,12 @@ export function HistogramPanel() {
               labels: chartData.map((d) => d.label),
               datasets: [
                 {
-                  label: currency1,
-                  data: chartData.map((d) => d.count1),
+                  label: pairLabel,
+                  data: chartData.map((d) => d.count),
                   backgroundColor: "#2563eb",
                   barPercentage: 0.9,
                   categoryPercentage: 0.8,
                 },
-                ...(showBothCurrencies
-                  ? [
-                      {
-                        label: currency2,
-                        data: chartData.map((d) => d.count2),
-                        backgroundColor: "#93c5fd",
-                        barPercentage: 0.9,
-                        categoryPercentage: 0.8,
-                      },
-                    ]
-                  : []),
               ],
             }}
           />
