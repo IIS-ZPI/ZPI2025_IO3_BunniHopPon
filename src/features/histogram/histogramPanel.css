@@ -131,7 +131,7 @@
 }
 
 .histogram-chart-container {
-  height: 500px;
+  height: 600px;
   width: 100%;
   background: var(--bg);
   border: 1px solid var(--border);
@@ -141,7 +141,7 @@
 }
 
 .histogram-loading {
-  height: 500px;
+  height: 600px;
   width: 100%;
   background: var(--bg);
   border: 1px solid var(--border);
