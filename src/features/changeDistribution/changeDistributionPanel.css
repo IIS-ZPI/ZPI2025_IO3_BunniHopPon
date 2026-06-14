@@ -1,0 +1,123 @@
+.cdp {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.cdp-controls {
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.cdp-control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.cdp-control-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.cdp-control-group select {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+  min-width: 160px;
+}
+
+.cdp-control-group select:focus {
+  border-color: var(--accent);
+}
+
+.cdp-control-group select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cdp-mode-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.cdp-mode-toggle button {
+  padding: 10px 20px;
+  border: none;
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--sans);
+  font-size: 14px;
+}
+
+.cdp-mode-toggle button:not(:last-child) {
+  border-right: 1px solid var(--border);
+}
+
+.cdp-mode-toggle button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cdp-chart {
+  height: 600px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.cdp-spinner {
+  height: 600px;
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+.cdp-no-data {
+  color: var(--text);
+  font-style: italic;
+}
+
+.cdp-bar {
+  padding: 4px 8px;
+  cursor: default;
+}
+
+.cdp-tooltip {
+  position: absolute;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 14px;
+  color: var(--text-h);
+  pointer-events: none;
+}
