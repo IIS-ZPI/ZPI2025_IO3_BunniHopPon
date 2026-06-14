@@ -1,4 +1,4 @@
-export const CURRENCIES = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
+const CURRENCIES = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
 
 export function CurrencySelect({ value, onChange, disabled, id }) {
   return (
