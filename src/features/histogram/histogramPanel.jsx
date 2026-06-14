@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import "./histogramPanel.css";
 import { fetchNbpRates } from "../../core/sessionTrends.js";
 import { getHistogramDistribution } from "../../core/histogramDistribution.js";
+import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import {
   ResponsiveContainer,
   BarChart,
@@ -13,13 +14,6 @@ import {
   Legend,
 } from "recharts";
 
-const CURRENCIES = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
-const CURRENCY_NAMES = {
-  USD: "Dollar", EUR: "Euro", GBP: "Pound Sterling", JPY: "Yen",
-  AUD: "Australian Dollar", CAD: "Canadian Dollar", CHF: "Swiss Franc",
-  HUF: "Forint", CZK: "Czech Koruna", DKK: "Danish Krone",
-  NOK: "Norwegian Krone", SEK: "Swedish Krona",
-};
 
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
@@ -143,28 +137,16 @@ export function HistogramPanel() {
 
       <div className="histogram-controls">
         <div className="histogram-currency-selects">
-          <select
+          <CurrencySelect
             value={currency1}
             onChange={(e) => setCurrency1(e.target.value)}
             disabled={loading}
-          >
-            {CURRENCIES.map((c) => (
-              <option key={c} value={c}>
-                {c} – {CURRENCY_NAMES[c]}
-              </option>
-            ))}
-          </select>
-          <select
+          />
+          <CurrencySelect
             value={currency2}
             onChange={(e) => setCurrency2(e.target.value)}
             disabled={loading}
-          >
-            {CURRENCIES.map((c) => (
-              <option key={c} value={c}>
-                {c} – {CURRENCY_NAMES[c]}
-              </option>
-            ))}
-          </select>
+          />
         </div>
 
         <div className="histogram-mode-toggle">
