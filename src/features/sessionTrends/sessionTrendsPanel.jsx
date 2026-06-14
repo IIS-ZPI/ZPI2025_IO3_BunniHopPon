@@ -109,6 +109,7 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
 
   return (
     <div className="session-trends-panel">
+      <h2 className="session-trends-title">Rising, falling, and unchanged sessions analysis</h2>
       <div className="controls">
         <div className="control-group">
           <label htmlFor="currency-select">Exchange rate</label>
