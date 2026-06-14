@@ -271,13 +271,13 @@ export function HistogramPanel() {
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: {
+                legend: { display: false },
+                title: {
                   display: true,
-                  position: "top",
-                  labels: {
-                    color: "#6b6375",
-                    font: { size: 12 },
-                  },
+                  text: pairLabel,
+                  color: "#6b6375",
+                  font: { size: 12 },
+                  padding: { bottom: 8 },
                 },
                 tooltip: {
                   backgroundColor: "#fff",
