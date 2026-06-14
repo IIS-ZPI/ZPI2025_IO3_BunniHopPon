@@ -7,14 +7,26 @@ import {
 import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import { StatisticsModule } from "./statisticsModule.jsx";
 import {
-  ResponsiveContainer,
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip
-} from "recharts";
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from "chart.js";
+import { Line } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 function calculateEndDate(startDateStr, period) {
   const start = new Date(startDateStr);
@@ -156,34 +168,61 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
           <div className="chart-container" data-testid="session-trends-chart">
             <div className="chart-area">
               {data && data.length > 0 ? (
-                <ResponsiveContainer width="100%" height="100%">
-                  <LineChart data={data} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
-                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--border)" />
-                    <XAxis
-                      dataKey="date"
-                      tick={{ fontSize: 12 }}
-                      stroke="var(--text)"
-                      tickFormatter={(str) => str.split("-").slice(1).join("-")}
-                    />
-                    <YAxis
-                      domain={["auto", "auto"]}
-                      tick={{ fontSize: 12 }}
-                      stroke="var(--text)"
-                    />
-                    <Tooltip
-                      contentStyle={{ backgroundColor: "var(--bg)", border: "1px solid var(--border)", borderRadius: "8px" }}
-                      itemStyle={{ color: "var(--accent)" }}
-                    />
-                    <Line
-                      type="linear"
-                      dataKey="rate"
-                      stroke="var(--accent)"
-                      strokeWidth={2}
-                      dot={{ r: 4, fill: "var(--accent)", strokeWidth: 0 }}
-                      activeDot={{ r: 6, fill: "var(--accent)" }}
-                    />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Line
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                      legend: { display: false },
+                      tooltip: {
+                        backgroundColor: "#fff",
+                        titleColor: "#08060d",
+                        bodyColor: "#2563eb",
+                        borderColor: "#e5e4e7",
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false,
+                      },
+                    },
+                    scales: {
+                      x: {
+                        grid: { display: false },
+                        ticks: {
+                          color: "#6b6375",
+                          font: { size: 12 },
+                          callback: function (val) {
+                            const label = this.getLabelForValue(val);
+                            return label.split("-").slice(1).join("-");
+                          },
+                        },
+                      },
+                      y: {
+                        grid: { color: "#e5e4e7" },
+                        ticks: {
+                          color: "#6b6375",
+                          font: { size: 12 },
+                        },
+                      },
+                    },
+                  }}
+                  data={{
+                    labels: data.map((d) => d.date),
+                    datasets: [
+                      {
+                        label: "Rate",
+                        data: data.map((d) => d.rate),
+                        borderColor: "#2563eb",
+                        backgroundColor: "#2563eb",
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: "#2563eb",
+                        pointBorderWidth: 0,
+                        pointHoverRadius: 6,
+                        tension: 0,
+                      },
+                    ],
+                  }}
+                />
               ) : (
                 <div className="no-data">No data available for the selected period.</div>
               )}
