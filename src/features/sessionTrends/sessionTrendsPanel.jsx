@@ -109,6 +109,7 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
 
   return (
     <div className="session-trends-panel">
+      <h2 className="session-trends-title">Rising, falling, and unchanged sessions analysis</h2>
       <div className="controls">
         <div className="control-group">
           <label htmlFor="currency-select">Exchange rate</label>
@@ -133,28 +134,31 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
           />
         </div>
 
-        <div className="time-periods">
-          {periods.map((p) => {
-            const tempD = new Date(today);
-            const offset = getPeriodOffset(p);
-            if (offset.days) tempD.setDate(tempD.getDate() - offset.days);
-            if (offset.months) tempD.setMonth(tempD.getMonth() - offset.months);
-            if (offset.years) tempD.setFullYear(tempD.getFullYear() - offset.years);
-            
-            const isValid = startDate <= tempD.toISOString().split("T")[0];
+        <div className="control-group">
+          <label>Time period</label>
+          <div className="time-periods">
+            {periods.map((p) => {
+              const tempD = new Date(today);
+              const offset = getPeriodOffset(p);
+              if (offset.days) tempD.setDate(tempD.getDate() - offset.days);
+              if (offset.months) tempD.setMonth(tempD.getMonth() - offset.months);
+              if (offset.years) tempD.setFullYear(tempD.getFullYear() - offset.years);
+              
+              const isValid = startDate <= tempD.toISOString().split("T")[0];
 
-            return (
-              <button
-                key={p}
-                onClick={() => setPeriod(p)}
-                disabled={isLoading || !isValid}
-                className={period === p ? "active" : ""}
-                title={!isValid ? "Start date is too recent for this period" : ""}
-              >
-                {p}
-              </button>
-            );
-          })}
+              return (
+                <button
+                  key={p}
+                  onClick={() => setPeriod(p)}
+                  disabled={isLoading || !isValid}
+                  className={period === p ? "active" : ""}
+                  title={!isValid ? "Start date is too recent for this period" : ""}
+                >
+                  {p}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 

@@ -162,3 +162,11 @@
   background: #fef3ee;
   color: #9a6b4e;
 }
+
+.session-trends-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-h);
+  margin: 0;
+  letter-spacing: -0.24px;
+}
