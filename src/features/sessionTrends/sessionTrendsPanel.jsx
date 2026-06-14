@@ -4,6 +4,7 @@ import {
   fetchNbpRates,
   calcMinMaxAvg,
 } from "../../core/sessionTrends.js";
+import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import { StatisticsModule } from "./statisticsModule.jsx";
 import {
   ResponsiveContainer,
@@ -54,7 +55,6 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
 
   const isLoading = externalLoading || internalLoading;
 
-  const currencies = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
   const periods = ["1w", "2w", "1m", "1q", "6m", "1y"];
 
   const maxStartDate = useMemo(() => {
@@ -100,16 +100,12 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
       <div className="controls">
         <div className="control-group">
           <label htmlFor="currency-select">Exchange rate</label>
-          <select
+          <CurrencySelect
             id="currency-select"
             value={currency}
             onChange={(e) => setCurrency(e.target.value)}
             disabled={isLoading}
-          >
-            {currencies.map((c) => (
-              <option key={c} value={c}>{c}</option>
-            ))}
-          </select>
+          />
         </div>
 
         <div className="control-group">

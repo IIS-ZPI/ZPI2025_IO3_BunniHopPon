@@ -1,14 +1,51 @@
+import { useState } from 'react'
 import './App.css'
 import { SessionTrendsPanel } from './features/sessionTrends/sessionTrendsPanel.jsx'
+import { HistogramPanel } from './features/histogram/histogramPanel.jsx'
+
+const PAGES = [
+  { id: 'trends', label: 'Session Trends' },
+  { id: 'histogram', label: 'Monthly and Quarterly Change Distribution' },
+]
 
 function App() {
+  const [page, setPage] = useState('trends')
+
   return (
     <div className="App">
-      <header style={{ padding: '32px', borderBottom: '1px solid var(--border)', background: 'var(--bg)' }}>
+      <header style={{
+        padding: '32px',
+        borderBottom: '1px solid var(--border)',
+        background: 'var(--bg)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+      }}>
         <h1 style={{ margin: 0, color: 'var(--text-h)', fontSize: '40px' }}>NBP Analytics</h1>
+        <select
+          value={page}
+          onChange={(e) => setPage(e.target.value)}
+          style={{
+            padding: '10px 14px',
+            border: '1px solid var(--border)',
+            borderRadius: '8px',
+            background: 'var(--bg)',
+            color: 'var(--text-h)',
+            fontFamily: 'var(--sans)',
+            fontSize: '14px',
+            fontWeight: '500',
+            cursor: 'pointer',
+            outline: 'none',
+            minWidth: '280px',
+          }}
+        >
+          {PAGES.map((p) => (
+            <option key={p.id} value={p.id}>{p.label}</option>
+          ))}
+        </select>
       </header>
       <main style={{ background: 'var(--bg)', minHeight: '80vh', width: '100%' }}>
-        <SessionTrendsPanel />
+        {page === 'trends' ? <SessionTrendsPanel /> : <HistogramPanel />}
       </main>
       <div className="ticks"></div>
       <section id="spacer"></section>

@@ -1,4 +1,5 @@
 import { useState } from "react";
+import "./changeDistributionPanel.css";
 
 const CURRENCIES = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
 
