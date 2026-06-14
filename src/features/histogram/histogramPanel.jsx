@@ -4,15 +4,24 @@ import { fetchNbpRates } from "../../core/sessionTrends.js";
 import { getHistogramDistribution } from "../../core/histogramDistribution.js";
 import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import {
-  ResponsiveContainer,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
   Tooltip,
   Legend,
-} from "recharts";
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+);
 
 
 const MONTH_NAMES = [
@@ -221,30 +230,71 @@ export function HistogramPanel() {
         <div className="histogram-no-data">No data available for the selected period.</div>
       ) : (
         <div className="histogram-chart-container">
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              data={chartData}
-              margin={{ top: 20, right: 30, left: 20, bottom: 20 }}
-              barCategoryGap="10%"
-            >
-              <CartesianGrid strokeDasharray="3 3" stroke="var(--border)" />
-              <XAxis dataKey="label" tick={{ fontSize: 12 }} stroke="var(--text)" />
-              <YAxis tick={{ fontSize: 12 }} stroke="var(--text)" allowDecimals={false} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: "var(--bg)",
-                  border: "1px solid var(--border)",
-                  borderRadius: "8px",
-                }}
-                itemStyle={{ color: "var(--text-h)" }}
-              />
-              {showBothCurrencies && <Legend />}
-              <Bar dataKey="count1" name={currency1} fill="var(--accent)" />
-              {showBothCurrencies && (
-                <Bar dataKey="count2" name={currency2} fill="#93c5fd" />
-              )}
-            </BarChart>
-          </ResponsiveContainer>
+          <Bar
+            options={{
+              responsive: true,
+              maintainAspectRatio: false,
+              plugins: {
+                legend: {
+                  display: showBothCurrencies,
+                  position: "top",
+                  labels: {
+                    color: "#6b6375",
+                    font: { size: 12 },
+                  },
+                },
+                tooltip: {
+                  backgroundColor: "#fff",
+                  titleColor: "#08060d",
+                  bodyColor: "#08060d",
+                  borderColor: "#e5e4e7",
+                  borderWidth: 1,
+                  padding: 10,
+                  displayColors: false,
+                },
+              },
+              scales: {
+                x: {
+                  grid: { display: false },
+                  ticks: {
+                    color: "#6b6375",
+                    font: { size: 12 },
+                  },
+                },
+                y: {
+                  grid: { color: "#e5e4e7" },
+                  ticks: {
+                    color: "#6b6375",
+                    font: { size: 12 },
+                    precision: 0,
+                  },
+                },
+              },
+            }}
+            data={{
+              labels: chartData.map((d) => d.label),
+              datasets: [
+                {
+                  label: currency1,
+                  data: chartData.map((d) => d.count1),
+                  backgroundColor: "#2563eb",
+                  barPercentage: 0.9,
+                  categoryPercentage: 0.8,
+                },
+                ...(showBothCurrencies
+                  ? [
+                      {
+                        label: currency2,
+                        data: chartData.map((d) => d.count2),
+                        backgroundColor: "#93c5fd",
+                        barPercentage: 0.9,
+                        categoryPercentage: 0.8,
+                      },
+                    ]
+                  : []),
+              ],
+            }}
+          />
         </div>
       )}
     </div>
