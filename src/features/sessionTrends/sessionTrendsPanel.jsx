@@ -90,7 +90,15 @@ export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
         setData(rates);
       } catch (err) {
         console.error("Error loading data:", err);
-        setError("Failed to fetch data: " + err.message);
+        const isNetworkError = !navigator.onLine || 
+          err.message.toLowerCase().includes("failed to fetch") || 
+          err.message.toLowerCase().includes("networkerror") ||
+          err.message.toLowerCase().includes("network error");
+        if (isNetworkError) {
+          setError("No internet connection. Could not fetch data from NBP API.");
+        } else {
+          setError("Failed to fetch data: " + err.message);
+        }
         setData([]);
       } finally {
         setInternalLoading(false);
