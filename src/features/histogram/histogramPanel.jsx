@@ -72,32 +72,46 @@ function buildChartData(bins1, bins2) {
 }
 
 export function HistogramPanel() {
+  const now = useMemo(() => new Date(), []);
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+
   const [mode, setMode] = useState("quarterly");
   const [currency1, setCurrency1] = useState("USD");
   const [currency2, setCurrency2] = useState("EUR");
-  const [quarterValue, setQuarterValue] = useState("2024-Q3");
-  const [monthYear, setMonthYear] = useState(2024);
-  const [monthNum, setMonthNum] = useState(9);
+  
+  const initialQuarter = (() => {
+    const q = Math.floor((currentMonth - 1) / 3) + 1;
+    if (q === 1) return `${currentYear - 1}-Q4`;
+    return `${currentYear}-Q${q - 1}`;
+  })();
+
+  const [quarterValue, setQuarterValue] = useState(initialQuarter);
+  const [monthYear, setMonthYear] = useState(currentMonth === 1 ? currentYear - 1 : currentYear);
+  const [monthNum, setMonthNum] = useState(currentMonth === 1 ? 12 : currentMonth - 1);
+  
   const [rates1, setRates1] = useState([]);
   const [rates2, setRates2] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const quarterOptions = useMemo(() => {
+  const monthYearOptions = useMemo(() => {
     const opts = [];
-    for (let y = 2025; y >= 2002; y--) {
+    for (let y = currentYear; y >= 2002; y--) opts.push(y);
+    return opts;
+  }, [currentYear]);
+
+  const quarterOptions = useMemo(() => {
+    const currentQuarter = Math.floor((currentMonth - 1) / 3) + 1;
+    const opts = [];
+    for (let y = currentYear; y >= 2002; y--) {
       for (let q = 4; q >= 1; q--) {
+        if (y === currentYear && q >= currentQuarter) continue;
         opts.push(`${y}-Q${q}`);
       }
     }
     return opts;
-  }, []);
-
-  const monthYearOptions = useMemo(() => {
-    const opts = [];
-    for (let y = 2025; y >= 2002; y--) opts.push(y);
-    return opts;
-  }, []);
+  }, [currentYear, currentMonth]);
 
   useEffect(() => {
     async function load() {
@@ -212,9 +226,11 @@ export function HistogramPanel() {
                 onChange={(e) => setMonthNum(Number(e.target.value))}
                 disabled={loading}
               >
-                {MONTH_NAMES.map((name, i) => (
-                  <option key={i + 1} value={i + 1}>{name}</option>
-                ))}
+                {MONTH_NAMES.map((name, i) => {
+                  const mNum = i + 1;
+                  if (monthYear === currentYear && mNum >= currentMonth) return null;
+                  return <option key={mNum} value={mNum}>{name}</option>;
+                })}
               </select>
               <select
                 className="histogram-date-select"

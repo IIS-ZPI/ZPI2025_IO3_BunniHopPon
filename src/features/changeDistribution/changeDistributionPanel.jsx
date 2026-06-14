@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import "./changeDistributionPanel.css";
 
 const CURRENCIES = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
@@ -8,22 +8,31 @@ const MONTH_NAMES = [
   "July", "August", "September", "October", "November", "December",
 ];
 
+const NOW = new Date();
+const CURRENT_YEAR = NOW.getFullYear();
+const CURRENT_MONTH = NOW.getMonth();
+
 const QUARTER_OPTIONS = (() => {
+  const currentQuarter = Math.floor(CURRENT_MONTH / 3) + 1;
   const opts = [];
-  for (let y = 2025; y >= 2002; y--)
-    for (let q = 4; q >= 1; q--)
+  for (let y = CURRENT_YEAR; y >= 2002; y--)
+    for (let q = 4; q >= 1; q--) {
+      if (y === CURRENT_YEAR && q >= currentQuarter) continue;
       opts.push({ value: `${y}-Q${q}`, label: `${y} Q${q}` });
+    }
   return opts;
 })();
 
 const MONTH_OPTIONS = (() => {
   const opts = [];
-  for (let y = 2025; y >= 2002; y--)
-    for (let m = 11; m >= 0; m--)
+  for (let y = CURRENT_YEAR; y >= 2002; y--)
+    for (let m = 11; m >= 0; m--) {
+      if (y === CURRENT_YEAR && m >= CURRENT_MONTH) continue;
       opts.push({
         value: `${y}-${String(m + 1).padStart(2, "0")}`,
         label: `${MONTH_NAMES[m]} ${y}`,
       });
+    }
   return opts;
 })();
 
@@ -35,14 +44,25 @@ export default function ChangeDistributionPanel({
   const [mode, setMode] = useState(initialMode);
   const [baseCurrency, setBaseCurrency] = useState("USD");
   const [quoteCurrency, setQuoteCurrency] = useState("EUR");
-  const [selectedPeriod, setSelectedPeriod] = useState(
-    initialMode === "quarterly" ? "2024-Q3" : "2024-09"
-  );
+
+  const initialPeriod = useMemo(() => {
+    if (initialMode === "quarterly") {
+      return QUARTER_OPTIONS[0]?.value || "";
+    } else {
+      return MONTH_OPTIONS[0]?.value || "";
+    }
+  }, [initialMode]);
+
+  const [selectedPeriod, setSelectedPeriod] = useState(initialPeriod);
   const [hoveredBar, setHoveredBar] = useState(null);
 
   const handleModeChange = (newMode) => {
     setMode(newMode);
-    setSelectedPeriod(newMode === "quarterly" ? "2024-Q3" : "2024-09");
+    if (newMode === "quarterly") {
+      setSelectedPeriod(QUARTER_OPTIONS[0]?.value || "");
+    } else {
+      setSelectedPeriod(MONTH_OPTIONS[0]?.value || "");
+    }
   };
 
   const handleBaseCurrencyChange = (e) => {

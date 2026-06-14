@@ -56,7 +56,7 @@ function getPeriodOffset(period) {
 }
 
 export function SessionTrendsPanel({ isLoading: externalLoading = false }) {
-  const today = useMemo(() => new Date("2026-06-02"), []);
+  const today = useMemo(() => new Date(), []);
 
   const [currency, setCurrency] = useState("USD");
   const [internalStartDate, setInternalStartDate] = useState("2026-05-01");
