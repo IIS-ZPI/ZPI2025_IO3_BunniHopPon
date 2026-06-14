@@ -2,6 +2,7 @@ import { describe, it, expect, jest } from "@jest/globals";
 import {
   normalizeNbpResponse,
   fetchNbpRates,
+  chunkDateRange,
   countSessionTrends,
   calcMedian,
   calcMode,
@@ -355,5 +356,61 @@ describe("calcMinMaxAvg edge cases", () => {
     expect(() =>
       calcMinMaxAvg([{ date: "d1", rate: Infinity }])
     ).toThrow();
+  });
+});
+
+describe("chunkDateRange", () => {
+  it("splits a date range into chunks of maximum 93 days", () => {
+    const chunks = chunkDateRange("2024-01-01", "2024-05-01", 93);
+    expect(chunks.length).toBe(2);
+    expect(chunks[0].start).toBe("2024-01-01");
+    expect(chunks[0].end).toBe("2024-04-02");
+    expect(chunks[1].start).toBe("2024-04-03");
+    expect(chunks[1].end).toBe("2024-05-01");
+  });
+
+  it("returns a single chunk if the range is shorter than maxDays", () => {
+    const chunks = chunkDateRange("2024-01-01", "2024-01-10", 93);
+    expect(chunks.length).toBe(1);
+    expect(chunks[0].start).toBe("2024-01-01");
+    expect(chunks[0].end).toBe("2024-01-10");
+  });
+});
+
+describe("fetchNbpRates with chunking", () => {
+  it("makes multiple fetch requests for ranges longer than 93 days and merges results", async () => {
+    const chunk1Response = {
+      table: "A",
+      code: "USD",
+      rates: [{ effectiveDate: "2024-01-02", mid: 4.0 }]
+    };
+    const chunk2Response = {
+      table: "A",
+      code: "USD",
+      rates: [{ effectiveDate: "2024-04-05", mid: 4.1 }]
+    };
+
+    const fetchMock = jest.fn()
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => chunk1Response
+      })
+      .mockResolvedValueOnce({
+        ok: true,
+        json: async () => chunk2Response
+      });
+
+    const result = await fetchNbpRates(
+      "USD",
+      "2024-01-01",
+      "2024-05-01",
+      fetchMock
+    );
+
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+    expect(result).toEqual([
+      { date: "2024-01-02", rate: 4.0 },
+      { date: "2024-04-05", rate: 4.1 }
+    ]);
   });
 });
