@@ -166,7 +166,11 @@ export function HistogramPanel() {
             <CurrencySelect
               id="base-currency-select"
               value={currency1}
-              onChange={(e) => setCurrency1(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === currency2) setCurrency2(currency1);
+                setCurrency1(val);
+              }}
               disabled={loading}
             />
           </div>
@@ -175,7 +179,11 @@ export function HistogramPanel() {
             <CurrencySelect
               id="quote-currency-select"
               value={currency2}
-              onChange={(e) => setCurrency2(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === currency1) setCurrency1(currency2);
+                setCurrency2(val);
+              }}
               disabled={loading}
             />
           </div>
