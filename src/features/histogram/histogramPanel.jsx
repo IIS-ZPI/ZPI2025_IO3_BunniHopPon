@@ -20,11 +20,6 @@ const CURRENCY_NAMES = {
   HUF: "Forint", CZK: "Czech Koruna", DKK: "Danish Krone",
   NOK: "Norwegian Krone", SEK: "Swedish Krona",
 };
-const CURRENCY_FLAGS = {
-  USD: "🇺🇸", EUR: "🇪🇺", GBP: "🇬🇧", JPY: "🇯🇵",
-  AUD: "🇦🇺", CAD: "🇨🇦", CHF: "🇨🇭", HUF: "🇭🇺",
-  CZK: "🇨🇿", DKK: "🇩🇰", NOK: "🇳🇴", SEK: "🇸🇪",
-};
 
 const MONTH_NAMES = [
   "January", "February", "March", "April", "May", "June",
@@ -155,7 +150,7 @@ export function HistogramPanel() {
           >
             {CURRENCIES.map((c) => (
               <option key={c} value={c}>
-                {CURRENCY_FLAGS[c]} {c} – {CURRENCY_NAMES[c]}
+                {c} – {CURRENCY_NAMES[c]}
               </option>
             ))}
           </select>
@@ -166,7 +161,7 @@ export function HistogramPanel() {
           >
             {CURRENCIES.map((c) => (
               <option key={c} value={c}>
-                {CURRENCY_FLAGS[c]} {c} – {CURRENCY_NAMES[c]}
+                {c} – {CURRENCY_NAMES[c]}
               </option>
             ))}
           </select>
