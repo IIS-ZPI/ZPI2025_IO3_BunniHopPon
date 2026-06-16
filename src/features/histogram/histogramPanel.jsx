@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import "./histogramPanel.css";
 import { fetchNbpRates } from "../../core/sessionTrends.js";
-import { getHistogramDistribution } from "../../core/histogramDistribution.js";
+import { getHistogramDistribution, getCrossRateHistogram } from "../../core/histogramDistribution.js";
 import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import {
   Chart as ChartJS,
@@ -55,31 +55,16 @@ function formatBinLabel(min) {
   return `${min.toFixed(1)}%`;
 }
 
-function buildChartData(bins1, bins2) {
-  const map = new Map();
-  const addBins = (bins, key) => {
-    for (const bin of bins) {
-      const label = formatBinLabel(bin.min);
-      if (!map.has(bin.min)) map.set(bin.min, { label, count1: 0, count2: 0 });
-      map.get(bin.min)[key] = bin.count;
-    }
-  };
-  addBins(bins1, "count1");
-  addBins(bins2, "count2");
-  return [...map.entries()]
-    .sort(([a], [b]) => a - b)
-    .map(([, v]) => v);
-}
-
-export function HistogramPanel() {
+export function HistogramPanel({ onLoadingChange }) {
   const now = useMemo(() => new Date(), []);
   const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
+  const currentMonth = now.getMonth() + 1; // 1-indexed
 
   const [mode, setMode] = useState("quarterly");
   const [currency1, setCurrency1] = useState("USD");
   const [currency2, setCurrency2] = useState("EUR");
-  
+
+  // Initial values based on current date
   const initialQuarter = (() => {
     const q = Math.floor((currentMonth - 1) / 3) + 1;
     if (q === 1) return `${currentYear - 1}-Q4`;
@@ -89,11 +74,18 @@ export function HistogramPanel() {
   const [quarterValue, setQuarterValue] = useState(initialQuarter);
   const [monthYear, setMonthYear] = useState(currentMonth === 1 ? currentYear - 1 : currentYear);
   const [monthNum, setMonthNum] = useState(currentMonth === 1 ? 12 : currentMonth - 1);
-  
+
   const [rates1, setRates1] = useState([]);
   const [rates2, setRates2] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    if (onLoadingChange) {
+      onLoadingChange(loading);
+    }
+  }, [loading, onLoadingChange]);
+
 
   const monthYearOptions = useMemo(() => {
     const opts = [];
@@ -153,14 +145,22 @@ export function HistogramPanel() {
     load();
   }, [currency1, currency2, mode, quarterValue, monthYear, monthNum]);
 
-  const chartData = useMemo(() => {
-    const bins1 = rates1.length >= 2 ? getHistogramDistribution(rates1) : [];
-    const bins2 = rates2.length >= 2 ? getHistogramDistribution(rates2) : [];
-    if (bins1.length === 0 && bins2.length === 0) return [];
-    return buildChartData(bins1, bins2);
-  }, [rates1, rates2]);
+  const pairLabel = currency1 === currency2
+    ? `${currency1}/PLN`
+    : `${currency1}/${currency2}`;
 
-  const showBothCurrencies = currency1 !== currency2 && rates2.length >= 2;
+  const chartData = useMemo(() => {
+    let bins;
+    if (currency1 === currency2) {
+      if (rates1.length < 2) return [];
+      bins = getHistogramDistribution(rates1);
+    } else {
+      if (rates1.length < 2 || rates2.length < 2) return [];
+      bins = getCrossRateHistogram(rates1, rates2);
+    }
+    if (bins.length === 0) return [];
+    return bins.map((b) => ({ label: formatBinLabel(b.min), count: b.count }));
+  }, [rates1, rates2, currency1, currency2]);
 
   return (
     <div className="histogram-panel">
@@ -173,7 +173,11 @@ export function HistogramPanel() {
             <CurrencySelect
               id="base-currency-select"
               value={currency1}
-              onChange={(e) => setCurrency1(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === currency2) setCurrency2(currency1);
+                setCurrency1(val);
+              }}
               disabled={loading}
             />
           </div>
@@ -182,7 +186,11 @@ export function HistogramPanel() {
             <CurrencySelect
               id="quote-currency-select"
               value={currency2}
-              onChange={(e) => setCurrency2(e.target.value)}
+              onChange={(e) => {
+                const val = e.target.value;
+                if (val === currency1) setCurrency1(currency2);
+                setCurrency2(val);
+              }}
               disabled={loading}
             />
           </div>
@@ -270,13 +278,13 @@ export function HistogramPanel() {
               responsive: true,
               maintainAspectRatio: false,
               plugins: {
-                legend: {
-                  display: showBothCurrencies,
-                  position: "top",
-                  labels: {
-                    color: "#6b6375",
-                    font: { size: 12 },
-                  },
+                legend: { display: false },
+                title: {
+                  display: true,
+                  text: pairLabel,
+                  color: "#6b6375",
+                  font: { size: 12 },
+                  padding: { bottom: 8 },
                 },
                 tooltip: {
                   backgroundColor: "#fff",
@@ -310,23 +318,12 @@ export function HistogramPanel() {
               labels: chartData.map((d) => d.label),
               datasets: [
                 {
-                  label: currency1,
-                  data: chartData.map((d) => d.count1),
+                  label: pairLabel,
+                  data: chartData.map((d) => d.count),
                   backgroundColor: "#2563eb",
                   barPercentage: 0.9,
                   categoryPercentage: 0.8,
                 },
-                ...(showBothCurrencies
-                  ? [
-                      {
-                        label: currency2,
-                        data: chartData.map((d) => d.count2),
-                        backgroundColor: "#93c5fd",
-                        barPercentage: 0.9,
-                        categoryPercentage: 0.8,
-                      },
-                    ]
-                  : []),
               ],
             }}
           />

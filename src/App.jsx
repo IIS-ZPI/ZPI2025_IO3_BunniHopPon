@@ -11,6 +11,7 @@ const PAGES = [
 
 function App() {
   const [page, setPage] = useState('trends')
+  const [isAppLoading, setIsAppLoading] = useState(false)
 
   return (
     <div className="App">
@@ -29,6 +30,7 @@ function App() {
         <select
           value={page}
           onChange={(e) => setPage(e.target.value)}
+          disabled={isAppLoading}
           style={{
             padding: '10px 14px',
             border: '1px solid var(--border)',
@@ -41,6 +43,7 @@ function App() {
             cursor: 'pointer',
             outline: 'none',
             minWidth: '280px',
+            opacity: isAppLoading ? 0.5 : 1,
           }}
         >
           {PAGES.map((p) => (
@@ -49,7 +52,11 @@ function App() {
         </select>
       </header>
       <main style={{ background: 'var(--bg)', minHeight: '80vh', width: '100%' }}>
-        {page === 'trends' ? <SessionTrendsPanel /> : <HistogramPanel />}
+        {page === 'trends' ? (
+          <SessionTrendsPanel onLoadingChange={setIsAppLoading} />
+        ) : (
+          <HistogramPanel onLoadingChange={setIsAppLoading} />
+        )}
       </main>
       <div className="ticks"></div>
       <section id="spacer"></section>
