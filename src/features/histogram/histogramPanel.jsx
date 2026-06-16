@@ -58,13 +58,12 @@ function formatBinLabel(min) {
 export function HistogramPanel({ onLoadingChange }) {
   const now = useMemo(() => new Date(), []);
   const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1; // 1-indexed
+  const currentMonth = now.getMonth() + 1;
 
   const [mode, setMode] = useState("quarterly");
   const [currency1, setCurrency1] = useState("USD");
   const [currency2, setCurrency2] = useState("EUR");
 
-  // Initial values based on current date
   const initialQuarter = (() => {
     const q = Math.floor((currentMonth - 1) / 3) + 1;
     if (q === 1) return `${currentYear - 1}-Q4`;
