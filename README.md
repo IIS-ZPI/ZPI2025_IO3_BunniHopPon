@@ -32,20 +32,20 @@ The application is automatically deployed to **GitHub Pages** whenever changes a
 
 ## iii. Location of project documentation
 The project documentation is located on Google Drive and can be accessed via the following link:
-[Project Documentation Folder](https://drive.google.com/drive/folders/1hAUl3grJmV9qCuNiwR_vumHjZNh2EynV)
+[Project Documentation Folder](https://drive.google.com/drive/folders/1zMXftoq0gpaNYPNwnP5m3pS3PdklfwuN?usp=sharing)
 
 ## iv. Location of backlogs
-Project backlogs (tasks, user stories, and sprints) are managed and tracked on [Trello](https://trello.com/b/E2XdRPx8/zpimain) and [GitHub Issues](https://github.com/IIS-ZPI/ZPI2025_IO3_BunniHopPon/issues?q=is%3Aissue%20state%3Aclosed). Bug reports specifically are tracked in GitHub Issues and are labeled with the `"Bug"` tag.
+Project backlogs (tasks and sprints) are managed and tracked on [Trello](https://trello.com/b/E2XdRPx8/zpimain) and [GitHub Issues](https://github.com/IIS-ZPI/ZPI2025_IO3_BunniHopPon/issues?q=is%3Aissue%20state%3Aclosed). Bug reports specifically are tracked in GitHub Issues and are labeled with the `"Bug"` tag.
 
 ## v. Continuous Integration (CI) & Unit Test Automation
 - **CI Tool**: GitHub Actions
-- **Configuration**: The CI pipeline is defined in `.github/workflows/lint-test.yml`.
+- **Configuration**: The CI pipeline is defined in `.github/workflows/workflow.yml`.
 - **Process**:
   - The workflow triggers automatically on pushes and pull requests to the `main`, `release`, and `develop` branches.
   - It runs a series of automated jobs: setting up the Node.js environment, installing dependencies (`npm ci`), running the linter (`npm run lint`), and executing all automated unit tests (`npm test` which includes both UI and logic tests).
   - Continuous Delivery (CD) is configured for the `release` branch, automatically building the app, creating versioned GitHub Releases, and deploying to GitHub Pages.
 
-## vi. Location of reports from the testing procedure and software fixing
-- **Google Drive**: Comprehensive testing reports and logs are uploaded and available on the project's [Google Drive](https://drive.google.com/drive/folders/1hAUl3grJmV9qCuNiwR_vumHjZNh2EynV).
+## vi. Location of test repots
+- **Google Drive**: Comprehensive testing reports are uploaded and available on the project's [Google Drive](https://drive.google.com/drive/folders/1f9ANK7-63Ejzo3UxFNjDyxmQkwBVcRNP?usp=sharing).
 - **Local Test Reports**: Running the test coverage script (`npm run test:cov`) generates comprehensive reports in the local `coverage/` directory.
-- **CI Test Reports**: The logs and reports from automated testing procedures and linting checks are securely stored and accessible in the **GitHub Actions** tab on the repository's GitHub page.
+- **CI Test Reports**: The logs and reports from automated testing procedures and linting checks are accessible in the [GitHub Actions](https://github.com/IIS-ZPI/ZPI2025_IO3_BunniHopPon/actions) tab on the repository's GitHub page.
