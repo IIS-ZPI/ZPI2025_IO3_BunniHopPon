@@ -1,9 +1,7 @@
 import { useState, useEffect, useMemo } from "react";
 import "./sessionTrendsPanel.css";
-import {
-  fetchNbpRates,
-  calcMinMaxAvg,
-} from "../../core/sessionTrends.js";
+import { calcMinMaxAvg } from "../../core/sessionTrends.js";
+import { fetchNbpRates } from "../../core/nbpService.js";
 import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import { StatisticsModule } from "./statisticsModule.jsx";
 import {
