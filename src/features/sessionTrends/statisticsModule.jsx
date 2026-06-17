@@ -21,7 +21,7 @@ function StatCard({ label, value, accent }) {
   );
 }
 
-export function StatisticsModule({ data, currency }) {
+export function StatisticsModule({ data }) {
   const hasData = data && data.length > 0;
 
   let median = null;
