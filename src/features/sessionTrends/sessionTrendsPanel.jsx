@@ -192,7 +192,7 @@ export function SessionTrendsPanel({
         },
       },
     }),
-    [currency],
+    [],
   );
 
   const chartData = useMemo(
