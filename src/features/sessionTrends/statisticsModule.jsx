@@ -1,3 +1,4 @@
+import { useMemo } from "react";
 import {
   countSessionTrends,
   calcMedian,
@@ -7,10 +8,10 @@ import {
 } from "../../core/sessionTrends.js";
 import "./statisticsModule.css";
 
-function fmt(n, decimals = 2) {
+const fmt = (n, decimals = 2) => {
   if (n == null) return "—";
   return Number(n).toFixed(decimals);
-}
+};
 
 function StatCard({ label, value, accent }) {
   return (
@@ -22,56 +23,47 @@ function StatCard({ label, value, accent }) {
 }
 
 export function StatisticsModule({ data }) {
-  const hasData = data && data.length > 0;
+  const stats = useMemo(() => {
+    if (!data || data.length === 0) {
+      return {
+        median: null,
+        mode: null,
+        stddev: null,
+        cv: null,
+        trends: null,
+      };
+    }
 
-  let median = null;
-  let mode = null;
-  let stddev = null;
-  let cv = null;
-  let trends = null;
+    try {
+      return {
+        median: calcMedian(data),
+        mode: calcMode(data),
+        stddev: calcStdDev(data),
+        cv: calcCoeffOfVariation(data),
+        trends: countSessionTrends(data),
+      };
+    } catch (err) {
+      console.error("Error calculating statistics:", err);
+      return {
+        median: null,
+        mode: null,
+        stddev: null,
+        cv: null,
+        trends: null,
+      };
+    }
+  }, [data]);
 
-  if (hasData) {
-    try {
-      median = calcMedian(data);
-    } catch {
-      /* keep null */
-    }
-    try {
-      mode = calcMode(data);
-    } catch {
-      /* keep null */
-    }
-    try {
-      stddev = calcStdDev(data);
-    } catch {
-      /* keep null */
-    }
-    try {
-      cv = calcCoeffOfVariation(data);
-    } catch {
-      /* keep null */
-    }
-    try {
-      trends = countSessionTrends(data);
-    } catch {
-      /* keep null */
-    }
-  }
-
-  const cvValue = cv != null ? (cv * 100).toFixed(2) + "%" : "—";
+  const cvValue = stats.cv != null ? (stats.cv * 100).toFixed(2) + "%" : "—";
 
   return (
     <div className="statistics-module">
       <div className="stats-grid stats-grid--4">
-        <StatCard label="Median" value={fmt(median)} accent="blue" />
-        <StatCard
-          label="Mode"
-          value={mode != null ? fmt(mode) : "—"}
-          accent="blue"
-        />
+        <StatCard label="Median" value={fmt(stats.median)} accent="blue" />
+        <StatCard label="Mode" value={fmt(stats.mode)} accent="blue" />
         <StatCard
           label="Standard deviation"
-          value={fmt(stddev)}
+          value={fmt(stats.stddev)}
           accent="blue"
         />
         <StatCard
@@ -84,17 +76,17 @@ export function StatisticsModule({ data }) {
       <div className="stats-grid stats-grid--3">
         <StatCard
           label="Increasing"
-          value={trends ? trends.rising : "—"}
+          value={stats.trends?.rising ?? "—"}
           accent="green"
         />
         <StatCard
           label="Decreasing"
-          value={trends ? trends.falling : "—"}
+          value={stats.trends?.falling ?? "—"}
           accent="red"
         />
         <StatCard
           label="No change"
-          value={trends ? trends.unchanged : "—"}
+          value={stats.trends?.unchanged ?? "—"}
           accent="gray"
         />
       </div>
