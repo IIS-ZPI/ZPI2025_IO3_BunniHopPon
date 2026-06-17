@@ -1,0 +1,164 @@
+.histogram-panel {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.histogram-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-h);
+  margin: 0;
+  letter-spacing: -0.24px;
+}
+
+.histogram-controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.histogram-currency-selects {
+  display: flex;
+  gap: 16px;
+}
+
+.histogram-currency-selects select {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 14px;
+  outline: none;
+  cursor: pointer;
+  min-width: 180px;
+  transition: border-color 0.2s;
+}
+
+.histogram-currency-selects select:focus {
+  border-color: var(--accent);
+}
+
+.histogram-currency-selects select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.histogram-mode-toggle {
+  display: flex;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.histogram-mode-toggle button {
+  padding: 10px 20px;
+  border: none;
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--sans);
+  font-size: 14px;
+}
+
+.histogram-mode-toggle button:not(:last-child) {
+  border-right: 1px solid var(--border);
+}
+
+.histogram-mode-toggle button.active {
+  background: var(--accent);
+  color: #fff;
+}
+
+.histogram-mode-toggle button:hover:not(.active):not(:disabled) {
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.histogram-mode-toggle button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.histogram-date-picker {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.histogram-date-picker label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.histogram-date-select {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 16px;
+  outline: none;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+
+.histogram-date-select:focus {
+  border-color: var(--accent);
+}
+
+.histogram-date-select:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.histogram-month-selects {
+  display: flex;
+  gap: 8px;
+}
+
+.histogram-chart-container {
+  height: 600px;
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.histogram-loading {
+  height: 600px;
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.histogram-error {
+  color: #ef4444;
+  font-style: italic;
+}
+
+.histogram-no-data {
+  color: var(--text);
+  font-style: italic;
+}

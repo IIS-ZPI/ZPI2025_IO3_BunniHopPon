@@ -1,0 +1,172 @@
+.session-trends-panel {
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg);
+  color: var(--text);
+}
+
+.controls {
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.control-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 200px;
+}
+
+.control-group label {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-h);
+}
+
+.control-group select,
+.control-group input {
+  padding: 10px 14px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text-h);
+  font-family: var(--sans);
+  font-size: 16px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.control-group select:focus,
+.control-group input:focus {
+  border-color: var(--accent);
+}
+
+.time-periods {
+  display: flex;
+  gap: 8px;
+  padding-bottom: 2px;
+}
+
+.time-periods button {
+  padding: 8px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--bg);
+  color: var(--text);
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.time-periods button:hover:not(:disabled) {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.time-periods button.active {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.time-periods button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.chart-container {
+  height: 600px;
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+}
+
+.chart-area {
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.chart-area-loading {
+  height: 600px;
+  width: 100%;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.no-data, .error-message {
+  color: var(--text);
+  font-style: italic;
+}
+
+.error-message {
+  color: #ef4444;
+}
+
+.spinner {
+  text-align: center;
+  color: var(--accent);
+  font-weight: 500;
+}
+
+/* ── Min / Max / Avg badges ── */
+
+.chart-badges {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  padding-top: 16px;
+  flex-shrink: 0;
+}
+
+.chart-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 20px;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.01em;
+}
+
+.chart-badge--max {
+  background: #fff7ed;
+  color: #c2410c;
+}
+
+.chart-badge--min {
+  background: #fef2f2;
+  color: #dc2626;
+}
+
+.chart-badge--avg {
+  background: #fef3ee;
+  color: #9a6b4e;
+}
+
+.session-trends-title {
+  font-size: 24px;
+  font-weight: 500;
+  color: var(--text-h);
+  margin: 0;
+  letter-spacing: -0.24px;
+}

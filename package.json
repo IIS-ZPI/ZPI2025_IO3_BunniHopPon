@@ -1,0 +1,43 @@
+{
+  "name": "zpi2025-io3-bunnihoppon",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "npm run test:logic && npm run test:ui",
+    "test:logic": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.cjs",
+    "test:ui": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.ui.config.cjs",
+    "test:cov": "cross-env NODE_OPTIONS=--experimental-vm-modules jest --config jest.config.cjs --coverage"
+  },
+  "dependencies": {
+    "chart.js": "^4.5.1",
+    "react": "^19.2.6",
+    "react-chartjs-2": "^5.3.1",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/preset-react": "^7.29.7",
+    "@eslint/js": "^10.0.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "babel-jest": "^30.4.1",
+    "cross-env": "^10.1.0",
+    "eslint": "^10.3.0",
+    "eslint-plugin-react-hooks": "^7.1.1",
+    "eslint-plugin-react-refresh": "^0.5.2",
+    "globals": "^17.6.0",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
+    "vite": "^8.0.12"
+  }
+}
