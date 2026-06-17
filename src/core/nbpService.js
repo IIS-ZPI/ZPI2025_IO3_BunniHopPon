@@ -23,13 +23,13 @@ export function chunkDateRange(startStr, endStr, maxDays = 93) {
     if (currentEnd > end) {
       chunks.push({
         start: currentStart.toISOString().split("T")[0],
-        end: end.toISOString().split("T")[0]
+        end: end.toISOString().split("T")[0],
       });
       break;
     } else {
       chunks.push({
         start: currentStart.toISOString().split("T")[0],
-        end: currentEnd.toISOString().split("T")[0]
+        end: currentEnd.toISOString().split("T")[0],
       });
     }
 
@@ -52,13 +52,17 @@ export async function fetchNbpRates(code, startDate, endDate, fetchFn = fetch) {
 
     if (response.status === 404) {
       if (chunks.length === 1) {
-        throw new Error(`NBP API error: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `NBP API error: ${response.status} ${response.statusText}`,
+        );
       }
       return [];
     }
 
     if (!response.ok) {
-      throw new Error(`NBP API error: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `NBP API error: ${response.status} ${response.statusText}`,
+      );
     }
 
     const data = await response.json();

@@ -1,4 +1,3 @@
-
 export function countSessionTrends(points) {
   const result = {
     rising: 0,
@@ -28,7 +27,12 @@ function extractAndValidateRates(points) {
   }
   return points.map((p) => {
     const r = p.rate;
-    if (typeof r !== "number" || Number.isNaN(r) || !Number.isFinite(r) || r < 0) {
+    if (
+      typeof r !== "number" ||
+      Number.isNaN(r) ||
+      !Number.isFinite(r) ||
+      r < 0
+    ) {
       throw new Error("Invalid rate");
     }
     return r;
