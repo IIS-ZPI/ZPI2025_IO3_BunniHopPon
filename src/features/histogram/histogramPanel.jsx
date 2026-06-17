@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import "./histogramPanel.css";
-import { fetchNbpRates } from "../../core/sessionTrends.js";
+import { fetchNbpRates } from "../../core/nbpService.js";
 import { getHistogramDistribution, getCrossRateHistogram } from "../../core/histogramDistribution.js";
 import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import {

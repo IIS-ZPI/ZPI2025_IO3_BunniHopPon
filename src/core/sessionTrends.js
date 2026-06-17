@@ -1,4 +1,3 @@
-export { normalizeNbpResponse, chunkDateRange, fetchNbpRates } from "./nbpService.js";
 
 export function countSessionTrends(points) {
   const result = {

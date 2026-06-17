@@ -1,5 +1,5 @@
 import { describe, it, expect, jest } from "@jest/globals";
-import { fetchNbpRates } from "../../core/sessionTrends.js";
+import { fetchNbpRates } from "../../core/nbpService.js";
 import { 
     calculateDailyChanges, 
     initializeBins, 

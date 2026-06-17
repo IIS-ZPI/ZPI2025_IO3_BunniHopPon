@@ -1,8 +1,5 @@
 import { describe, it, expect, jest } from "@jest/globals";
 import {
-  normalizeNbpResponse,
-  fetchNbpRates,
-  chunkDateRange,
   countSessionTrends,
   calcMedian,
   calcMode,
@@ -10,6 +7,11 @@ import {
   calcCoeffOfVariation,
   calcMinMaxAvg
 } from "../../core/sessionTrends.js";
+import {
+  normalizeNbpResponse,
+  fetchNbpRates,
+  chunkDateRange
+} from "../../core/nbpService.js";
 
 describe("normalizeNbpResponse", () => {
   it("maps NBP response into date/rate points", () => {
