@@ -203,11 +203,29 @@ export function SessionTrendsPanel({
                         borderWidth: 1,
                         padding: 10,
                         displayColors: false,
+                        callbacks: {
+                          label: function (context) {
+                            let label = context.dataset.label || "";
+                            if (label) {
+                              label += ": ";
+                            }
+                            if (context.parsed.y !== null) {
+                              label += context.parsed.y.toFixed(4) + " " + currency;
+                            }
+                            return label;
+                          },
+                        },
                       },
                     },
                     scales: {
                       x: {
                         grid: { display: false },
+                        title: {
+                          display: true,
+                          text: "Date",
+                          color: "#6b6375",
+                          font: { size: 14, weight: "bold" },
+                        },
                         ticks: {
                           color: "#6b6375",
                           font: { size: 12 },
@@ -219,9 +237,18 @@ export function SessionTrendsPanel({
                       },
                       y: {
                         grid: { color: "#e5e4e7" },
+                        title: {
+                          display: true,
+                          text: `Rate (${currency})`,
+                          color: "#6b6375",
+                          font: { size: 14, weight: "bold" },
+                        },
                         ticks: {
                           color: "#6b6375",
                           font: { size: 12 },
+                          callback: function (value) {
+                            return value.toFixed(2) + " " + currency;
+                          },
                         },
                       },
                     },
@@ -253,12 +280,12 @@ export function SessionTrendsPanel({
       )}
 
       <div className="chart-badges">
-        <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma?.max)}</span>
-        <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma?.min)}</span>
-        <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma?.avg)}</span>
+        <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma?.max)} {currency}</span>
+        <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma?.min)} {currency}</span>
+        <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma?.avg)} {currency}</span>
       </div>
 
-      <StatisticsModule data={data} />
+      <StatisticsModule data={data} currency={currency} />
     </div>
   );
 }
