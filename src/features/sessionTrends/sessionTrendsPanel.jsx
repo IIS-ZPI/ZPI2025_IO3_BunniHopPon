@@ -203,11 +203,29 @@ export function SessionTrendsPanel({
                         borderWidth: 1,
                         padding: 10,
                         displayColors: false,
-                      },
-                    },
-                    scales: {
-                      x: {
+                        callbacks: {
+                          label: function (context) {
+                            let label = context.dataset.label || "";
+                            if (label) {
+                              label += ": ";
+                            }
+                            if (context.parsed.y !== null) {
+                              label += context.parsed.y.toFixed(4) + " PLN";
+                            }
+                            return label;
+                          },
+                        },
+                        },
+                        },
+                        scales: {
+                        x: {
                         grid: { display: false },
+                        title: {
+                          display: true,
+                          text: "Date",
+                          color: "#6b6375",
+                          font: { size: 14, weight: "bold" },
+                        },
                         ticks: {
                           color: "#6b6375",
                           font: { size: 12 },
@@ -216,21 +234,30 @@ export function SessionTrendsPanel({
                             return label.split("-").slice(1).join("-");
                           },
                         },
-                      },
-                      y: {
+                        },
+                        y: {
                         grid: { color: "#e5e4e7" },
+                        title: {
+                          display: true,
+                          text: "Rate (PLN)",
+                          color: "#6b6375",
+                          font: { size: 14, weight: "bold" },
+                        },
                         ticks: {
                           color: "#6b6375",
                           font: { size: 12 },
+                          callback: function (value) {
+                            return value.toFixed(2) + " PLN";
+                          },
                         },
-                      },
-                    },
-                  }}
-                  data={{
-                    labels: data.map((d) => d.date),
-                    datasets: [
-                      {
-                        label: "Rate",
+                        },
+                        },
+                        }}
+                        data={{
+                        labels: data.map((d) => d.date),
+                        datasets: [
+                        {
+                        label: `1 ${currency} in PLN`,
                         data: data.map((d) => d.rate),
                         borderColor: "#2563eb",
                         backgroundColor: "#2563eb",
@@ -240,25 +267,25 @@ export function SessionTrendsPanel({
                         pointBorderWidth: 0,
                         pointHoverRadius: 6,
                         tension: 0,
-                      },
-                    ],
-                  }}
-                />
-              ) : (
-                <div className="no-data">No data available for the selected period.</div>
-              )}
-            </div>
-          </div>
-        </>
-      )}
+                        },
+                        ],
+                        }}
+                        />
+                        ) : (
+                        <div className="no-data">No data available for the selected period.</div>
+                        )}
+                        </div>
+                        </div>
+                        </>
+                        )}
 
-      <div className="chart-badges">
-        <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma?.max)}</span>
-        <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma?.min)}</span>
-        <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma?.avg)}</span>
-      </div>
+                        <div className="chart-badges">
+                        <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma?.max)} PLN</span>
+                        <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma?.min)} PLN</span>
+                        <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma?.avg)} PLN</span>
+                        </div>
 
-      <StatisticsModule data={data} />
-    </div>
-  );
-}
+                        <StatisticsModule data={data} />
+                        </div>
+                        );
+                        }
