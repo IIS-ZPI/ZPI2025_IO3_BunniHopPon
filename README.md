@@ -31,8 +31,8 @@ The application is automatically deployed to **GitHub Pages** whenever changes a
    ```
 
 ## iii. Location of project documentation
-The project documentation is located on Google Drive and can be accessed via the following link:
-[Project Documentation Folder](https://drive.google.com/drive/folders/1zMXftoq0gpaNYPNwnP5m3pS3PdklfwuN?usp=sharing)
+The project documentation is located on GitHub and can be accessed via the following link:
+[Project Documentation Folder](https://github.com/IIS-ZPI/ZPI2025_IO3_BunniHopPon/tree/main/Docs)
 
 ## iv. Location of backlogs
 Project backlogs (tasks and sprints) are managed and tracked on [Trello](https://trello.com/b/E2XdRPx8/zpimain) and [GitHub Issues](https://github.com/IIS-ZPI/ZPI2025_IO3_BunniHopPon/issues?q=is%3Aissue%20state%3Aclosed). Bug reports specifically are tracked in GitHub Issues and are labeled with the `"Bug"` tag.
@@ -46,6 +46,6 @@ Project backlogs (tasks and sprints) are managed and tracked on [Trello](https:/
   - Continuous Delivery (CD) is configured for the `release` branch, automatically building the app, creating versioned GitHub Releases, and deploying to GitHub Pages.
 
 ## vi. Location of test repots
-- **Google Drive**: Comprehensive testing reports are uploaded and available on the project's [Google Drive](https://drive.google.com/drive/folders/1f9ANK7-63Ejzo3UxFNjDyxmQkwBVcRNP?usp=sharing).
+- **GitHub**: Comprehensive testing reports are uploaded and available on the project's [GitHub](https://github.com/IIS-ZPI/ZPI2025_IO3_BunniHopPon/tree/main/Docs/test%20reports).
 - **Local Test Reports**: Running the test coverage script (`npm run test:cov`) generates comprehensive reports in the local `coverage/` directory.
 - **CI Test Reports**: The logs and reports from automated testing procedures and linting checks are accessible in the [GitHub Actions](https://github.com/IIS-ZPI/ZPI2025_IO3_BunniHopPon/actions) tab on the repository's GitHub page.
