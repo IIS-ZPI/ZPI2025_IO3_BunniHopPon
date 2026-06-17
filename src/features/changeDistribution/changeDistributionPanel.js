@@ -1,10 +1,33 @@
 import { useState } from "react";
 
-const CURRENCIES = ["USD", "AUD", "CAD", "EUR", "HUF", "CHF", "GBP", "JPY", "CZK", "DKK", "NOK", "SEK"];
+const CURRENCIES = [
+  "USD",
+  "AUD",
+  "CAD",
+  "EUR",
+  "HUF",
+  "CHF",
+  "GBP",
+  "JPY",
+  "CZK",
+  "DKK",
+  "NOK",
+  "SEK",
+];
 
 const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 const QUARTER_OPTIONS = (() => {
@@ -35,7 +58,7 @@ export default function ChangeDistributionPanel({
   const [baseCurrency, setBaseCurrency] = useState("USD");
   const [quoteCurrency, setQuoteCurrency] = useState("EUR");
   const [selectedPeriod, setSelectedPeriod] = useState(
-    initialMode === "quarterly" ? "2024-Q3" : "2024-09"
+    initialMode === "quarterly" ? "2024-Q3" : "2024-09",
   );
   const [hoveredBar, setHoveredBar] = useState(null);
 
@@ -72,7 +95,11 @@ export default function ChangeDistributionPanel({
             onChange={handleBaseCurrencyChange}
             disabled={isLoading}
           >
-            {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            {CURRENCIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -84,15 +111,25 @@ export default function ChangeDistributionPanel({
             onChange={handleQuoteCurrencyChange}
             disabled={isLoading}
           >
-            {CURRENCIES.map((c) => <option key={c} value={c}>{c}</option>)}
+            {CURRENCIES.map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
           </select>
         </div>
 
         <div className="cdp-mode-toggle">
-          <button onClick={() => handleModeChange("monthly")} disabled={isLoading}>
+          <button
+            onClick={() => handleModeChange("monthly")}
+            disabled={isLoading}
+          >
             Monthly
           </button>
-          <button onClick={() => handleModeChange("quarterly")} disabled={isLoading}>
+          <button
+            onClick={() => handleModeChange("quarterly")}
+            disabled={isLoading}
+          >
             Quarterly
           </button>
         </div>
@@ -101,8 +138,8 @@ export default function ChangeDistributionPanel({
           <label htmlFor="cdp-period">
             <span data-testid="period-type-label">
               {mode === "quarterly" ? "Quarter" : "Month"}
-            </span>
-            {" "}Calculation Period
+            </span>{" "}
+            Calculation Period
           </label>
           <select
             id="cdp-period"
@@ -111,7 +148,9 @@ export default function ChangeDistributionPanel({
             disabled={isLoading}
           >
             {periodOptions.map((opt) => (
-              <option key={opt.value} value={opt.value}>{opt.label}</option>
+              <option key={opt.value} value={opt.value}>
+                {opt.label}
+              </option>
             ))}
           </select>
         </div>
@@ -143,7 +182,9 @@ export default function ChangeDistributionPanel({
               )}
             </>
           ) : (
-            <p className="cdp-no-data">No data available for the selected period.</p>
+            <p className="cdp-no-data">
+              No data available for the selected period.
+            </p>
           )}
         </div>
       )}
