@@ -1,7 +1,10 @@
 import { useState, useEffect, useMemo } from "react";
 import "./histogramPanel.css";
 import { fetchNbpRates } from "../../core/nbpService.js";
-import { getHistogramDistribution, getCrossRateHistogram } from "../../core/histogramDistribution.js";
+import {
+  getHistogramDistribution,
+  getCrossRateHistogram,
+} from "../../core/histogramDistribution.js";
 import { CurrencySelect } from "../../components/CurrencySelect.jsx";
 import {
   Chart as ChartJS,
@@ -20,13 +23,22 @@ ChartJS.register(
   BarElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 );
 
-
 const MONTH_NAMES = [
-  "January", "February", "March", "April", "May", "June",
-  "July", "August", "September", "October", "November", "December",
+  "January",
+  "February",
+  "March",
+  "April",
+  "May",
+  "June",
+  "July",
+  "August",
+  "September",
+  "October",
+  "November",
+  "December",
 ];
 
 function getQuarterRange(yearQ) {
@@ -71,8 +83,12 @@ export function HistogramPanel({ onLoadingChange }) {
   })();
 
   const [quarterValue, setQuarterValue] = useState(initialQuarter);
-  const [monthYear, setMonthYear] = useState(currentMonth === 1 ? currentYear - 1 : currentYear);
-  const [monthNum, setMonthNum] = useState(currentMonth === 1 ? 12 : currentMonth - 1);
+  const [monthYear, setMonthYear] = useState(
+    currentMonth === 1 ? currentYear - 1 : currentYear,
+  );
+  const [monthNum, setMonthNum] = useState(
+    currentMonth === 1 ? 12 : currentMonth - 1,
+  );
 
   const [rates1, setRates1] = useState([]);
   const [rates2, setRates2] = useState([]);
@@ -84,7 +100,6 @@ export function HistogramPanel({ onLoadingChange }) {
       onLoadingChange(loading);
     }
   }, [loading, onLoadingChange]);
-
 
   const monthYearOptions = useMemo(() => {
     const opts = [];
@@ -109,9 +124,10 @@ export function HistogramPanel({ onLoadingChange }) {
       setLoading(true);
       setError(null);
       try {
-        const range = mode === "quarterly"
-          ? getQuarterRange(quarterValue)
-          : getMonthRange(monthYear, monthNum);
+        const range =
+          mode === "quarterly"
+            ? getQuarterRange(quarterValue)
+            : getMonthRange(monthYear, monthNum);
 
         if (currency1 === currency2) {
           const r = await fetchNbpRates(currency1, range.start, range.end);
@@ -126,12 +142,15 @@ export function HistogramPanel({ onLoadingChange }) {
           setRates2(r2);
         }
       } catch (err) {
-        const isNetworkError = !navigator.onLine || 
-          err.message.toLowerCase().includes("failed to fetch") || 
+        const isNetworkError =
+          !navigator.onLine ||
+          err.message.toLowerCase().includes("failed to fetch") ||
           err.message.toLowerCase().includes("networkerror") ||
           err.message.toLowerCase().includes("network error");
         if (isNetworkError) {
-          setError("No internet connection. Could not fetch data from NBP API.");
+          setError(
+            "No internet connection. Could not fetch data from NBP API.",
+          );
         } else {
           setError("Failed to fetch data: " + err.message);
         }
@@ -144,9 +163,8 @@ export function HistogramPanel({ onLoadingChange }) {
     load();
   }, [currency1, currency2, mode, quarterValue, monthYear, monthNum]);
 
-  const pairLabel = currency1 === currency2
-    ? `${currency1}/PLN`
-    : `${currency1}/${currency2}`;
+  const pairLabel =
+    currency1 === currency2 ? `${currency1}/PLN` : `${currency1}/${currency2}`;
 
   const chartData = useMemo(() => {
     let bins;
@@ -163,7 +181,9 @@ export function HistogramPanel({ onLoadingChange }) {
 
   return (
     <div className="histogram-panel">
-      <h2 className="histogram-title">Monthly and Quarterly Change Distribution</h2>
+      <h2 className="histogram-title">
+        Monthly and Quarterly Change Distribution
+      </h2>
 
       <div className="histogram-controls">
         <div className="histogram-currency-selects">
@@ -243,8 +263,13 @@ export function HistogramPanel({ onLoadingChange }) {
               >
                 {MONTH_NAMES.map((name, i) => {
                   const mNum = i + 1;
-                  if (monthYear === currentYear && mNum >= currentMonth) return null;
-                  return <option key={mNum} value={mNum}>{name}</option>;
+                  if (monthYear === currentYear && mNum >= currentMonth)
+                    return null;
+                  return (
+                    <option key={mNum} value={mNum}>
+                      {name}
+                    </option>
+                  );
                 })}
               </select>
               <select
@@ -254,7 +279,9 @@ export function HistogramPanel({ onLoadingChange }) {
                 disabled={loading}
               >
                 {monthYearOptions.map((y) => (
-                  <option key={y} value={y}>{y}</option>
+                  <option key={y} value={y}>
+                    {y}
+                  </option>
                 ))}
               </select>
             </div>
@@ -269,7 +296,9 @@ export function HistogramPanel({ onLoadingChange }) {
       ) : error ? (
         <div className="histogram-error">{error}</div>
       ) : chartData.length === 0 ? (
-        <div className="histogram-no-data">No data available for the selected period.</div>
+        <div className="histogram-no-data">
+          No data available for the selected period.
+        </div>
       ) : (
         <div className="histogram-chart-container">
           <Bar
