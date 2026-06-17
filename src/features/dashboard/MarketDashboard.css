@@ -1,0 +1,146 @@
+.market-dashboard {
+  padding: 40px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 40px;
+  border-bottom: 2px solid #f3f4f6;
+  padding-bottom: 24px;
+}
+
+.header-info h2 {
+  font-size: 32px;
+  color: #08060d;
+  margin: 0 0 8px 0;
+}
+
+.header-info p {
+  color: #6b6375;
+  margin: 0;
+  font-size: 16px;
+}
+
+.market-stats {
+  display: flex;
+  gap: 24px;
+}
+
+.market-stat-mini {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.market-stat-mini .label {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #6b6375;
+  margin-bottom: 4px;
+}
+
+.market-stat-mini .value {
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.value.gainer { color: #10b981; }
+.value.loser { color: #ef4444; }
+
+.currency-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.currency-card {
+  background: white;
+  border: 1px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 24px;
+  transition: all 0.2s ease;
+  cursor: default;
+}
+
+.currency-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.05);
+  border-color: #d1d5db;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.currency-code {
+  font-weight: 800;
+  font-size: 24px;
+  color: #08060d;
+}
+
+.trend-indicator {
+  font-size: 20px;
+}
+
+.trend-indicator.up { color: #10b981; }
+.trend-indicator.down { color: #ef4444; }
+.trend-indicator.stable { color: #9ca3af; }
+
+.currency-name {
+  color: #6b6375;
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-transform: capitalize;
+}
+
+.currency-rate {
+  font-size: 28px;
+  font-weight: 700;
+  color: #08060d;
+  margin-bottom: 8px;
+}
+
+.currency-rate small {
+  font-size: 14px;
+  color: #6b6375;
+  font-weight: 400;
+}
+
+.currency-change {
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.currency-change.up { color: #10b981; }
+.currency-change.down { color: #ef4444; }
+.currency-change.stable { color: #9ca3af; }
+
+.dashboard-loading {
+  height: 60vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 20px;
+  color: #2563eb;
+  font-weight: 600;
+}
+
+.dashboard-error {
+  padding: 40px;
+  text-align: center;
+  color: #ef4444;
+  font-weight: 600;
+}
+
+/* Specific styling for top movers in the grid */
+.currency-card.up { border-left: 4px solid #10b981; }
+.currency-card.down { border-left: 4px solid #ef4444; }
+.currency-card.stable { border-left: 4px solid #9ca3af; }
