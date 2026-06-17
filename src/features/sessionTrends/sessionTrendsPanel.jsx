@@ -210,15 +210,15 @@ export function SessionTrendsPanel({
                               label += ": ";
                             }
                             if (context.parsed.y !== null) {
-                              label += context.parsed.y.toFixed(4) + " " + currency;
+                              label += context.parsed.y.toFixed(4) + " PLN";
                             }
                             return label;
                           },
                         },
-                      },
-                    },
-                    scales: {
-                      x: {
+                        },
+                        },
+                        scales: {
+                        x: {
                         grid: { display: false },
                         title: {
                           display: true,
@@ -234,12 +234,12 @@ export function SessionTrendsPanel({
                             return label.split("-").slice(1).join("-");
                           },
                         },
-                      },
-                      y: {
+                        },
+                        y: {
                         grid: { color: "#e5e4e7" },
                         title: {
                           display: true,
-                          text: `Rate (${currency})`,
+                          text: "Rate (PLN)",
                           color: "#6b6375",
                           font: { size: 14, weight: "bold" },
                         },
@@ -247,17 +247,17 @@ export function SessionTrendsPanel({
                           color: "#6b6375",
                           font: { size: 12 },
                           callback: function (value) {
-                            return value.toFixed(2) + " " + currency;
+                            return value.toFixed(2) + " PLN";
                           },
                         },
-                      },
-                    },
-                  }}
-                  data={{
-                    labels: data.map((d) => d.date),
-                    datasets: [
-                      {
-                        label: "Rate",
+                        },
+                        },
+                        }}
+                        data={{
+                        labels: data.map((d) => d.date),
+                        datasets: [
+                        {
+                        label: `1 ${currency} in PLN`,
                         data: data.map((d) => d.rate),
                         borderColor: "#2563eb",
                         backgroundColor: "#2563eb",
@@ -267,25 +267,25 @@ export function SessionTrendsPanel({
                         pointBorderWidth: 0,
                         pointHoverRadius: 6,
                         tension: 0,
-                      },
-                    ],
-                  }}
-                />
-              ) : (
-                <div className="no-data">No data available for the selected period.</div>
-              )}
-            </div>
-          </div>
-        </>
-      )}
+                        },
+                        ],
+                        }}
+                        />
+                        ) : (
+                        <div className="no-data">No data available for the selected period.</div>
+                        )}
+                        </div>
+                        </div>
+                        </>
+                        )}
 
-      <div className="chart-badges">
-        <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma?.max)} {currency}</span>
-        <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma?.min)} {currency}</span>
-        <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma?.avg)} {currency}</span>
-      </div>
+                        <div className="chart-badges">
+                        <span className="chart-badge chart-badge--max">▲ Max: {fmtVal(mma?.max)} PLN</span>
+                        <span className="chart-badge chart-badge--min">▼ Min: {fmtVal(mma?.min)} PLN</span>
+                        <span className="chart-badge chart-badge--avg">Avg: {fmtVal(mma?.avg)} PLN</span>
+                        </div>
 
-      <StatisticsModule data={data} currency={currency} />
-    </div>
-  );
-}
+                        <StatisticsModule data={data} />
+                        </div>
+                        );
+                        }

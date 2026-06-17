@@ -39,15 +39,14 @@ export function StatisticsModule({ data, currency }) {
   }
 
   const cvValue = cv != null ? (cv * 100).toFixed(2) + "%" : "—";
-  const suffix = currency ? ` ${currency}` : "";
 
   return (
     <div className="statistics-module">
       <div className="stats-grid stats-grid--4">
-        <StatCard label="Median"                   value={median != null ? fmt(median) + suffix : "—"} accent="blue" />
-        <StatCard label="Mode"                     value={mode != null ? fmt(mode) + suffix : "—"}     accent="blue" />
-        <StatCard label="Standard deviation"       value={stddev != null ? fmt(stddev) + suffix : "—"} accent="blue" />
-        <StatCard label="Coefficient of variation" value={cvValue}                                     accent="blue" />
+        <StatCard label="Median"                   value={fmt(median)}                   accent="blue" />
+        <StatCard label="Mode"                     value={mode != null ? fmt(mode) : "—"} accent="blue" />
+        <StatCard label="Standard deviation"       value={fmt(stddev)}                   accent="blue" />
+        <StatCard label="Coefficient of variation" value={cvValue}                       accent="blue" />
       </div>
 
       <div className="stats-grid stats-grid--3">
