@@ -8,6 +8,6 @@ if (!g.fetch) {
     Promise.resolve({
       ok: true,
       json: () => Promise.resolve({ rates: [] }),
-    })
+    }),
   );
 }

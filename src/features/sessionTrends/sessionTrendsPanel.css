@@ -112,7 +112,8 @@
   justify-content: center;
 }
 
-.no-data, .error-message {
+.no-data,
+.error-message {
   color: var(--text);
   font-style: italic;
 }
